@@ -42,12 +42,12 @@ import kotlinx.coroutines.delay
 @Composable
 fun MovieListScreen() {
     val movieViewModel: MovieViewModel = hiltViewModel()
-    val moviesByGenre by movieViewModel.moviesByGenre.collectAsState()
     val movies by movieViewModel.movies.collectAsState()
-    val genres by movieViewModel.genres.collectAsState()
     var currentImageUrl by remember {
         mutableStateOf<String?>(null)
     }
+
+    movieViewModel.getMovies(1)
 
     LaunchedEffect(movies) {
         if (movies.isNotEmpty() && currentImageUrl == null) {
@@ -62,31 +62,14 @@ fun MovieListScreen() {
         }
     }
 
-    if(movies.isNotEmpty()){
-        movies.take(15).shuffled().first().getFullPosterUrl()
-    }
-
-    genres.forEach {
-        println("${it.id} - ${it.name}")
-    }
-
-    movieViewModel.getMoviesByGenre(1, 27)
-    movieViewModel.getMovies(1)
-
     Box(
         modifier = Modifier.fillMaxSize().background(SoftBlack)
     ){
-
         currentImageUrl?.let {
             Crossfade(targetState = it, animationSpec = tween(durationMillis = 1000)) { imageUrl ->
                 HeadMovieItem(imageUrl)
             }
         }
-
-        LazyRow {
-
-        }
-
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             modifier = Modifier
@@ -97,7 +80,7 @@ fun MovieListScreen() {
             verticalArrangement = Arrangement.spacedBy(4.dp),
             contentPadding = PaddingValues(top = (LocalConfiguration.current.screenHeightDp / 2.5).dp)
         ) {
-            items(moviesByGenre) { movie ->
+            items(movies) { movie ->
                 MovieItem(movie = movie, onClick = { println(movie.title) })
             }
         }
@@ -141,7 +124,7 @@ fun MovieItem(movie: Movie, onClick: () -> Unit) {
             painter = rememberAsyncImagePainter(model = movie.getFullPosterUrl()),
             contentScale = ContentScale.FillBounds,
             contentDescription = "Movie Poster",
-            modifier = Modifier.fillMaxSize().height(300.dp)
+            modifier = Modifier.fillMaxWidth().height(300.dp)
         )
     }
 }
