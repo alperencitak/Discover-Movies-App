@@ -23,11 +23,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
@@ -38,7 +43,17 @@ import com.alperencitak.discover_movies_app.viewmodel.MovieViewModel
 fun MovieListScreen() {
     val movieViewModel: MovieViewModel = hiltViewModel()
     val movies by movieViewModel.movies.collectAsState()
-    var page = 1
+    val genres by movieViewModel.genres.collectAsState()
+    var page by remember { mutableIntStateOf(1) }
+
+    genres.forEach {
+        println("${it.id} - ${it.name}")
+    }
+
+    if (page == 1) {
+        movieViewModel.getMoviesByGenre(page, 27)
+    }
+
     Column(
         modifier = Modifier.padding(horizontal = 8.dp).fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -62,14 +77,14 @@ fun MovieListScreen() {
                 onClick = {
                     if(page>1){
                         page-=1
-                        movieViewModel.getMovies(page)
+                        movieViewModel.getLatestMovies(page)
                     }
                 }
             ) { Text(text = "<-") }
             Button(
                 onClick = {
                     page+=1
-                    movieViewModel.getMovies(page)
+                    movieViewModel.getLatestMovies(page)
                 }
             ) { Text(text = "->") }
         }
