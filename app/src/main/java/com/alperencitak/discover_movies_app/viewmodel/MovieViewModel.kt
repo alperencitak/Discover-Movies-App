@@ -19,6 +19,9 @@ class MovieViewModel @Inject constructor(
     private val _movies = MutableStateFlow<List<Movie>>(emptyList())
     val movies: StateFlow<List<Movie>> = _movies
 
+    private val _moviesByGenre = MutableStateFlow<List<Movie>>(emptyList())
+    val moviesByGenre: StateFlow<List<Movie>> = _moviesByGenre
+
     private val _genres = MutableStateFlow<List<Genre>>(emptyList())
     val genres: StateFlow<List<Genre>> = _genres
 
@@ -49,7 +52,7 @@ class MovieViewModel @Inject constructor(
     fun getMoviesByGenre(page: Int, genreId: Int){
         viewModelScope.launch {
             try {
-                _movies.value = repository.fetchMoviesByGenre(page, genreId)
+                _moviesByGenre.value = repository.fetchMoviesByGenre(page, genreId)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
