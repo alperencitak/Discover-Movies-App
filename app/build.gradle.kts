@@ -6,6 +6,8 @@ plugins {
     id("dagger.hilt.android.plugin")
 }
 
+val API_KEY = if (project.hasProperty("API_KEY")) project.property("API_KEY") as String else ""
+
 android {
     namespace = "com.alperencitak.discover_movies_app"
     compileSdk = 35
@@ -18,6 +20,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "API_KEY", API_KEY)
     }
 
     buildTypes {
@@ -38,6 +42,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
