@@ -2,6 +2,7 @@ package com.alperencitak.discover_movies_app.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.alperencitak.discover_movies_app.model.Movie
 import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
@@ -34,7 +36,7 @@ import com.alperencitak.discover_movies_app.ui.theme.SoftRed
 import com.alperencitak.discover_movies_app.viewmodel.MovieViewModel
 
 @Composable
-fun MovieCategoryScreen() {
+fun MovieCategoryScreen(navController: NavHostController) {
 
     val moviesViewModel: MovieViewModel = hiltViewModel()
     val moviesByGenre by moviesViewModel.moviesByGenre.collectAsState()
@@ -57,14 +59,16 @@ fun MovieCategoryScreen() {
         genreList.forEach { genreId ->
             val movies = moviesByGenre[genreId] ?: emptyList()
             val genreName = genres.find{ it.id == genreId}?.name ?: ""
-            ListRow(genreName, movies)
+            ListRow(genreName, movies){ movieId ->
+                navController.navigate("movie_detail_screen/$movieId")
+            }
         }
     }
 
 }
 
 @Composable
-fun ListRow(title: String, movies: List<Movie>){
+fun ListRow(title: String, movies: List<Movie>, onClick: (Int) -> Unit){
     Column(
         modifier = Modifier.fillMaxWidth().height(300.dp).padding(horizontal = 16.dp)
     ) {
@@ -80,7 +84,13 @@ fun ListRow(title: String, movies: List<Movie>){
         ) {
             items(movies){ movie ->
                 ElevatedCard(
-                    modifier = Modifier.fillMaxHeight().width(200.dp).padding(horizontal = 4.dp, vertical = 8.dp)
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(200.dp)
+                        .padding(horizontal = 4.dp, vertical = 8.dp)
+                        .clickable {
+                        onClick(movie.id)
+                    }
                 ) {
                     Image(
                         painter = rememberAsyncImagePainter(model = movie.getFullPosterUrl()),
