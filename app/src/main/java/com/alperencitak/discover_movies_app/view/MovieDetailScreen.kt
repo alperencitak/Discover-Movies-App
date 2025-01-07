@@ -28,6 +28,9 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -66,8 +69,8 @@ fun MovieDetailScreen(movieId: Int = 1){
 
     movieAsStateFlow.value?.let{ movie ->
 
-        val trailerKey = movie.videos.firstOrNull{ video -> video.type == "Trailer" }?.key
-        val videoTrailerUrl = trailerKey?.let { key -> "https://www.youtube.com/watch?v=$key" }
+        val trailerKey by remember { mutableStateOf(movie.videos.firstOrNull{ video -> video.type == "Trailer" }?.key) }
+        val videoTrailerUrl by remember { mutableStateOf(trailerKey?.let { key -> "https://www.youtube.com/embed/$key" }) }
 
         Column(
             modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
@@ -87,25 +90,8 @@ fun MovieDetailScreen(movieId: Int = 1){
             }
             Row(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp, vertical = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.End
             ) {
-                Button(
-                    onClick = {
-
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = SoftRed
-                    ),
-                    shape = androidx.compose.foundation.shape.AbsoluteCutCornerShape(0)
-                ) {
-                    Text(
-                        text = "WATCH",
-                        color = SoftBlack,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = nunito
-                    )
-                }
                 Button(
                     onClick = {
                         videoTrailerUrl?.let{ url ->
@@ -114,7 +100,7 @@ fun MovieDetailScreen(movieId: Int = 1){
                         }
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = SoftRed
+                        containerColor = if(videoTrailerUrl != null) SoftRed else Color.DarkGray
                     ),
                     shape = androidx.compose.foundation.shape.AbsoluteCutCornerShape(0)
                 ) {
