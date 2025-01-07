@@ -6,7 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.alperencitak.discover_movies_app.ui.theme.DiscoverMoviesAppTheme
 import com.alperencitak.discover_movies_app.view.MovieCategoryScreen
+import com.alperencitak.discover_movies_app.view.MovieDetailScreen
 import com.alperencitak.discover_movies_app.view.MovieListScreen
+import com.alperencitak.discover_movies_app.view.NavScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -16,8 +18,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             DiscoverMoviesAppTheme {
-                //MovieListScreen()
-                MovieCategoryScreen()
+                NavScreen()
             }
         }
     }
