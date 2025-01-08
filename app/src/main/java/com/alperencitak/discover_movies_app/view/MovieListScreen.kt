@@ -4,6 +4,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,6 +34,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.alperencitak.discover_movies_app.model.Movie
 import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
@@ -40,7 +42,7 @@ import com.alperencitak.discover_movies_app.viewmodel.MovieViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun MovieListScreen() {
+fun MovieListScreen(navController: NavHostController) {
     val movieViewModel: MovieViewModel = hiltViewModel()
     val movies by movieViewModel.movies.collectAsState()
     var currentImageUrl by remember {
@@ -81,7 +83,9 @@ fun MovieListScreen() {
             contentPadding = PaddingValues(top = (LocalConfiguration.current.screenHeightDp / 2.5).dp)
         ) {
             items(movies) { movie ->
-                MovieItem(movie = movie, onClick = { println(movie.title) })
+                MovieItem(movie = movie){
+                    navController.navigate("movie_detail/${movie.id}")
+                }
             }
         }
     }
@@ -118,7 +122,10 @@ fun HeadMovieItem(imageUrl: String) {
 @Composable
 fun MovieItem(movie: Movie, onClick: () -> Unit) {
     ElevatedCard(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 8.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 4.dp, vertical = 8.dp)
+            .clickable { onClick() }
     ) {
         Image(
             painter = rememberAsyncImagePainter(model = movie.getFullPosterUrl()),
