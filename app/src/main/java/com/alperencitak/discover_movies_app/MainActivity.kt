@@ -70,7 +70,6 @@ fun ScaffoldWithNavBar(){
                         .shadow(8.dp)
                 ){
                     NavigationBarItem(
-                        modifier = Modifier.padding(top = 12.dp, bottom = 4.dp),
                         selected = currentRoute == "main",
                         onClick = {
                             if(currentRoute != "main"){
@@ -85,7 +84,6 @@ fun ScaffoldWithNavBar(){
                         )
                     )
                     NavigationBarItem(
-                        modifier = Modifier.padding(top = 12.dp, bottom = 4.dp),
                         selected = currentRoute == "categories",
                         onClick = {
                             if(currentRoute != "categories"){
