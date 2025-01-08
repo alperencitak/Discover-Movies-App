@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -38,6 +39,7 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.alperencitak.discover_movies_app.model.Movie
 import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
+import com.alperencitak.discover_movies_app.utils.CircularLoadingScreen
 import com.alperencitak.discover_movies_app.viewmodel.MovieViewModel
 import kotlinx.coroutines.delay
 
@@ -51,43 +53,52 @@ fun MovieListScreen(navController: NavHostController) {
 
     movieViewModel.getMovies(1)
 
-    LaunchedEffect(movies) {
-        if (movies.isNotEmpty() && currentImageUrl == null) {
-            currentImageUrl = movies.take(15).shuffled().first().getFullPosterUrl()
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(5000)
-            currentImageUrl = movies.take(15).shuffled().first().getFullPosterUrl()
-        }
-    }
-
-    Box(
-        modifier = Modifier.fillMaxSize().background(SoftBlack)
-    ){
-        currentImageUrl?.let {
-            Crossfade(targetState = it, animationSpec = tween(durationMillis = 1000)) { imageUrl ->
-                HeadMovieItem(imageUrl)
+    if (movies.isNotEmpty()) {
+        LaunchedEffect(movies) {
+            if (movies.isNotEmpty() && currentImageUrl == null) {
+                currentImageUrl = movies.take(15).shuffled().first().getFullPosterUrl()
             }
         }
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+
+        LaunchedEffect(Unit) {
+            while (true) {
+                delay(5000)
+                currentImageUrl = movies.take(15).shuffled().first().getFullPosterUrl()
+            }
+        }
+
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .zIndex(1f)
-                .background(Color.Transparent),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-            contentPadding = PaddingValues(top = (LocalConfiguration.current.screenHeightDp / 2.5).dp)
+                .fillMaxSize()
+                .background(SoftBlack)
         ) {
-            items(movies) { movie ->
-                MovieItem(movie = movie){
-                    navController.navigate("movie_detail/${movie.id}")
+            currentImageUrl?.let {
+                Crossfade(
+                    targetState = it,
+                    animationSpec = tween(durationMillis = 1000)
+                ) { imageUrl ->
+                    HeadMovieItem(imageUrl)
+                }
+            }
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .zIndex(1f)
+                    .background(Color.Transparent),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                contentPadding = PaddingValues(top = (LocalConfiguration.current.screenHeightDp / 2.5).dp)
+            ) {
+                items(movies) { movie ->
+                    MovieItem(movie = movie) {
+                        navController.navigate("movie_detail/${movie.id}")
+                    }
                 }
             }
         }
+    } else {
+        CircularLoadingScreen()
     }
 }
 
@@ -131,7 +142,9 @@ fun MovieItem(movie: Movie, onClick: () -> Unit) {
             painter = rememberAsyncImagePainter(model = movie.getFullPosterUrl()),
             contentScale = ContentScale.FillBounds,
             contentDescription = "Movie Poster",
-            modifier = Modifier.fillMaxWidth().height(300.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(2f/3f)
         )
     }
 }
