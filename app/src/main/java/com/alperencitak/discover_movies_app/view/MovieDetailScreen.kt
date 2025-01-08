@@ -50,6 +50,7 @@ import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
 import com.alperencitak.discover_movies_app.ui.theme.SoftGray
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
 import com.alperencitak.discover_movies_app.ui.theme.SoftWhite
+import com.alperencitak.discover_movies_app.utils.getVoteColor
 import com.alperencitak.discover_movies_app.viewmodel.MovieViewModel
 
 @Composable
@@ -89,9 +90,37 @@ fun MovieDetailScreen(movieId: Int = 1){
                 )
             }
             Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp, vertical = 16.dp),
-                horizontalArrangement = Arrangement.End
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp, bottom = 8.dp, start = 32.dp, end = 32.dp)
             ) {
+                Text(
+                    text = movie.movie.genres.joinToString(" / ") { it.name },
+                    color = SoftGray,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = nunito
+                )
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp, vertical = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Button(
+                    onClick = { },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = getVoteColor(movie.movie.vote_average)
+                    ),
+                    shape = androidx.compose.foundation.shape.CircleShape
+                ) {
+                    Text(
+                        text = movie.movie.vote_average.toString(),
+                        color = SoftBlack,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = nunito
+                    )
+                }
                 Button(
                     onClick = {
                         videoTrailerUrl?.let{ url ->
@@ -120,7 +149,7 @@ fun MovieDetailScreen(movieId: Int = 1){
             ){
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    color = SoftWhite,
+                    color = SoftGray,
                     fontSize = 18.sp,
                     fontFamily = nunito,
                     text = movie.movie.overview
@@ -157,7 +186,7 @@ fun MovieDetailScreen(movieId: Int = 1){
                             )
                         ) {
                             Text(
-                                color = SoftWhite,
+                                color = SoftGray,
                                 text = cast.name,
                                 fontWeight = FontWeight.Bold,
                                 fontFamily = nunito,
