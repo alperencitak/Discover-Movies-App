@@ -66,7 +66,7 @@ fun MovieCategoryScreen(navController: NavHostController) {
             val movies = moviesByGenre[genreId] ?: emptyList()
             val genreName = genres.find{ it.id == genreId}?.name ?: ""
             ListRow(genreName, movies){ movieId ->
-                navController.navigate("movie_detail_screen/$movieId")
+                navController.navigate("movie_detail/$movieId")
             }
         }
     }
