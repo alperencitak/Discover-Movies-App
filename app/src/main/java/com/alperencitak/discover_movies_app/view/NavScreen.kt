@@ -2,27 +2,30 @@ package com.alperencitak.discover_movies_app.view
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun NavScreen() {
-    val navController = rememberNavController()
-
+fun NavScreen(navController: NavHostController, paddingValues: PaddingValues) {
     NavHost(
         navController = navController,
-        startDestination = "movie_category_screen",
+        startDestination = "main",
         modifier = Modifier.fillMaxSize()
     ) {
-        composable("movie_category_screen") {
+        composable("main"){
+            MovieListScreen(navController = navController)
+        }
+        composable("categories") {
             MovieCategoryScreen(navController = navController)
         }
-        composable("movie_detail_screen/{movieId}") { backStackEntry ->
+        composable("movie_detail/{movieId}") { backStackEntry ->
             val movieId = backStackEntry.arguments?.getString("movieId")?.toIntOrNull() ?: 0
             MovieDetailScreen(movieId = movieId)
         }
