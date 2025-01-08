@@ -50,11 +50,12 @@ import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
 import com.alperencitak.discover_movies_app.ui.theme.SoftGray
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
 import com.alperencitak.discover_movies_app.ui.theme.SoftWhite
+import com.alperencitak.discover_movies_app.utils.CircularLoadingScreen
 import com.alperencitak.discover_movies_app.utils.getVoteColor
 import com.alperencitak.discover_movies_app.viewmodel.MovieViewModel
 
 @Composable
-fun MovieDetailScreen(movieId: Int = 1){
+fun MovieDetailScreen(movieId: Int = 1) {
     val movieViewModel: MovieViewModel = hiltViewModel()
     val context = LocalContext.current
     val movieAsStateFlow = movieViewModel.movie.collectAsState()
@@ -65,16 +66,24 @@ fun MovieDetailScreen(movieId: Int = 1){
     )
 
     Box(
-        modifier = Modifier.fillMaxSize().background(SoftBlack)
+        modifier = Modifier
+            .fillMaxSize()
+            .background(SoftBlack)
     )
 
-    movieAsStateFlow.value?.let{ movie ->
+    if(movieAsStateFlow.value == null){
+        CircularLoadingScreen()
+    }
 
-        val trailerKey by remember { mutableStateOf(movie.videos.firstOrNull{ video -> video.type == "Trailer" }?.key) }
+    movieAsStateFlow.value?.let { movie ->
+
+        val trailerKey by remember { mutableStateOf(movie.videos.firstOrNull { video -> video.type == "Trailer" }?.key) }
         val videoTrailerUrl by remember { mutableStateOf(trailerKey?.let { key -> "https://www.youtube.com/embed/$key" }) }
 
         Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
             ElevatedCard(
                 modifier = Modifier
@@ -103,7 +112,9 @@ fun MovieDetailScreen(movieId: Int = 1){
                 )
             }
             Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp, vertical = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp, vertical = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Button(
@@ -123,13 +134,13 @@ fun MovieDetailScreen(movieId: Int = 1){
                 }
                 Button(
                     onClick = {
-                        videoTrailerUrl?.let{ url ->
+                        videoTrailerUrl?.let { url ->
                             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                             context.startActivity(intent)
                         }
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if(videoTrailerUrl != null) SoftRed else Color.DarkGray
+                        containerColor = if (videoTrailerUrl != null) SoftRed else Color.DarkGray
                     ),
                     shape = androidx.compose.foundation.shape.AbsoluteCutCornerShape(0)
                 ) {
@@ -146,7 +157,7 @@ fun MovieDetailScreen(movieId: Int = 1){
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp, vertical = 16.dp)
-            ){
+            ) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     color = SoftGray,
@@ -156,8 +167,10 @@ fun MovieDetailScreen(movieId: Int = 1){
                 )
             }
             Column(
-                modifier = Modifier.fillMaxWidth().padding(16.dp)
-            ){
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
                 Text(
                     color = SoftRed,
                     text = "Actors",
@@ -175,7 +188,7 @@ fun MovieDetailScreen(movieId: Int = 1){
                         .height((LocalConfiguration.current.screenHeightDp / 3).dp)
                         .padding(bottom = 16.dp)
                 ) {
-                    items(movie.casts){ cast ->
+                    items(movie.casts) { cast ->
                         ElevatedCard(
                             modifier = Modifier
                                 .fillMaxHeight()
@@ -194,7 +207,9 @@ fun MovieDetailScreen(movieId: Int = 1){
                                 maxLines = 1,
                                 minLines = 1,
                                 fontSize = 18.sp,
-                                modifier = Modifier.fillMaxWidth().padding(4.dp)
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(4.dp)
                             )
                             Image(
                                 painter = rememberAsyncImagePainter(
