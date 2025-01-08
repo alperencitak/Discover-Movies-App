@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,6 +37,7 @@ import com.alperencitak.discover_movies_app.R
 import com.alperencitak.discover_movies_app.model.Movie
 import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
+import com.alperencitak.discover_movies_app.utils.CircularLoadingScreen
 import com.alperencitak.discover_movies_app.viewmodel.MovieViewModel
 
 @Composable
@@ -51,35 +53,43 @@ fun MovieCategoryScreen(navController: NavHostController) {
         moviesViewModel.getMoviesByGenre(1, genreId)
     }
 
-    Box(
-        modifier = Modifier.fillMaxSize().background(SoftBlack)
-    )
+    if (moviesByGenre.isEmpty()) {
+        CircularLoadingScreen()
+    } else {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(SoftBlack)
+        )
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 64.dp)
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.Center
-    ) {
-        genreList.forEach { genreId ->
-            val movies = moviesByGenre[genreId] ?: emptyList()
-            val genreName = genres.find{ it.id == genreId}?.name ?: ""
-            ListRow(genreName, movies){ movieId ->
-                navController.navigate("movie_detail/$movieId")
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 64.dp)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.Center
+        ) {
+            genreList.forEach { genreId ->
+                val movies = moviesByGenre[genreId] ?: emptyList()
+                val genreName = genres.find { it.id == genreId }?.name ?: ""
+                ListRow(genreName, movies) { movieId ->
+                    navController.navigate("movie_detail/$movieId")
+                }
             }
         }
     }
-
 }
 
 @Composable
-fun ListRow(title: String, movies: List<Movie>, onClick: (Int) -> Unit){
+fun ListRow(title: String, movies: List<Movie>, onClick: (Int) -> Unit) {
     val nunito = FontFamily(
         Font(R.font.nunito_black)
     )
     Column(
-        modifier = Modifier.fillMaxWidth().height(300.dp).padding(horizontal = 16.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(250.dp)
+            .padding(horizontal = 16.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -100,18 +110,18 @@ fun ListRow(title: String, movies: List<Movie>, onClick: (Int) -> Unit){
                 fontFamily = nunito
             )
         }
-        LazyRow (
+        LazyRow(
             modifier = Modifier.fillMaxHeight()
         ) {
-            items(movies){ movie ->
+            items(movies) { movie ->
                 ElevatedCard(
                     modifier = Modifier
                         .fillMaxHeight()
-                        .width(200.dp)
+                        .aspectRatio(2f/3f)
                         .padding(horizontal = 4.dp, vertical = 8.dp)
                         .clickable {
-                        onClick(movie.id)
-                    }
+                            onClick(movie.id)
+                        }
                 ) {
                     Image(
                         painter = rememberAsyncImagePainter(model = movie.getFullPosterUrl()),
