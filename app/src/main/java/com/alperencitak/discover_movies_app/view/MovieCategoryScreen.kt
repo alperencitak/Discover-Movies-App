@@ -24,12 +24,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import com.alperencitak.discover_movies_app.R
 import com.alperencitak.discover_movies_app.model.Movie
 import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
@@ -41,7 +44,7 @@ fun MovieCategoryScreen(navController: NavHostController) {
     val moviesViewModel: MovieViewModel = hiltViewModel()
     val moviesByGenre by moviesViewModel.moviesByGenre.collectAsState()
     val genres by moviesViewModel.genres.collectAsState()
-    val genreList = listOf(27, 28, 12, 16, 35, 80, 18, 10751, 14, 9648, 10749, 878, 10752, 53)
+    val genreList = listOf(28, 878, 16, 35, 27, 14, 80, 12, 18, 10751, 9648, 10749, 53, 10752)
 
     moviesViewModel.getMovieGenres()
     genreList.forEach { genreId ->
@@ -53,7 +56,10 @@ fun MovieCategoryScreen(navController: NavHostController) {
     )
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(top = 64.dp).verticalScroll(rememberScrollState()),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 64.dp)
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center
     ) {
         genreList.forEach { genreId ->
@@ -69,6 +75,9 @@ fun MovieCategoryScreen(navController: NavHostController) {
 
 @Composable
 fun ListRow(title: String, movies: List<Movie>, onClick: (Int) -> Unit){
+    val nunito = FontFamily(
+        Font(R.font.nunito_black)
+    )
     Column(
         modifier = Modifier.fillMaxWidth().height(300.dp).padding(horizontal = 16.dp)
     ) {
@@ -76,8 +85,20 @@ fun ListRow(title: String, movies: List<Movie>, onClick: (Int) -> Unit){
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = title, fontWeight = FontWeight.Bold, fontSize = 18.sp, color = SoftRed)
-            Text(text = "See All", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = SoftRed)
+            Text(
+                text = title,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = SoftRed,
+                fontFamily = nunito
+            )
+            Text(
+                text = "See All",
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                color = SoftRed,
+                fontFamily = nunito
+            )
         }
         LazyRow (
             modifier = Modifier.fillMaxHeight()
