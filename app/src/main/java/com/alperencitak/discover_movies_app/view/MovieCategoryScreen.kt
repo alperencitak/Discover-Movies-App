@@ -38,6 +38,7 @@ import com.alperencitak.discover_movies_app.model.Movie
 import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
 import com.alperencitak.discover_movies_app.utils.CircularLoadingScreen
+import com.alperencitak.discover_movies_app.utils.ListRow
 import com.alperencitak.discover_movies_app.viewmodel.MovieViewModel
 
 @Composable
@@ -72,64 +73,11 @@ fun MovieCategoryScreen(navController: NavHostController) {
             genreList.forEach { genreId ->
                 val movies = moviesByGenre[genreId] ?: emptyList()
                 val genreName = genres.find { it.id == genreId }?.name ?: ""
-                ListRow(genreName, movies) { movieId ->
+                ListRow(genreName, movies, onClick = { movieId ->
                     navController.navigate("movie_detail/$movieId")
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun ListRow(title: String, movies: List<Movie>, onClick: (Int) -> Unit) {
-    val nunito = FontFamily(
-        Font(R.font.nunito_black)
-    )
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(250.dp)
-            .padding(horizontal = 16.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = title,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = SoftRed,
-                fontFamily = nunito
-            )
-            Text(
-                text = "See All",
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                color = SoftRed,
-                fontFamily = nunito
-            )
-        }
-        LazyRow(
-            modifier = Modifier.fillMaxHeight()
-        ) {
-            items(movies) { movie ->
-                ElevatedCard(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .aspectRatio(2f/3f)
-                        .padding(horizontal = 4.dp, vertical = 8.dp)
-                        .clickable {
-                            onClick(movie.id)
-                        }
-                ) {
-                    Image(
-                        painter = rememberAsyncImagePainter(model = movie.getFullPosterUrl()),
-                        contentScale = ContentScale.Crop,
-                        contentDescription = "Movie Poster",
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
+                }, onSeeAllClick = {
+                    navController.navigate("category_see_all/$genreId/$genreName")
+                })
             }
         }
     }
