@@ -1,5 +1,7 @@
 package com.alperencitak.discover_movies_app.view
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,6 +22,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.alperencitak.discover_movies_app.R
+import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
+import com.alperencitak.discover_movies_app.ui.theme.SoftRed
 import com.alperencitak.discover_movies_app.utils.MovieItem
 import com.alperencitak.discover_movies_app.utils.CircularLoadingScreen
 import com.alperencitak.discover_movies_app.viewmodel.MovieViewModel
@@ -27,7 +31,7 @@ import com.alperencitak.discover_movies_app.viewmodel.MovieViewModel
 @Composable
 fun CategorySeeAllScreen(navController: NavHostController, genreId: Int, genreName: String) {
     val movieViewModel: MovieViewModel = hiltViewModel()
-    val moviesByGenre by movieViewModel.movies.collectAsState()
+    val moviesByGenre by movieViewModel.moviesByGenre.collectAsState()
     movieViewModel.getMoviesByGenre(page = 1, genreId=genreId)
 
     val nunito = FontFamily(
@@ -35,23 +39,34 @@ fun CategorySeeAllScreen(navController: NavHostController, genreId: Int, genreNa
     )
 
     if(moviesByGenre.isNotEmpty()){
-        Text(
-            text = genreName,
-            fontFamily = nunito,
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 8.dp),
-        ) {
-            items(moviesByGenre){ movie ->
-                MovieItem(movie) {
-                    navController.navigate("movie_detail/${movie.id}")
+        val movies = moviesByGenre[genreId] ?: emptyList()
+        if(movies.isNotEmpty()){
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(SoftBlack)
+            )
+            Text(
+                text = genreName,
+                fontFamily = nunito,
+                fontWeight = FontWeight.Bold,
+                color = SoftRed,
+                fontSize = 20.sp,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3),
+                modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 32.dp),
+            ) {
+                items(movies){ movie ->
+                    MovieItem(movie) {
+                        navController.navigate("movie_detail/${movie.id}")
+                    }
                 }
             }
+        }else{
+            CircularLoadingScreen()
         }
     }else{
         CircularLoadingScreen()
