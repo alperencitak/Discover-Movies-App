@@ -40,6 +40,8 @@ import coil.compose.rememberAsyncImagePainter
 import com.alperencitak.discover_movies_app.model.Movie
 import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
 import com.alperencitak.discover_movies_app.utils.CircularLoadingScreen
+import com.alperencitak.discover_movies_app.utils.HeadMovieItem
+import com.alperencitak.discover_movies_app.utils.MovieItem
 import com.alperencitak.discover_movies_app.viewmodel.MovieViewModel
 import kotlinx.coroutines.delay
 
@@ -99,52 +101,5 @@ fun MovieListScreen(navController: NavHostController) {
         }
     } else {
         CircularLoadingScreen()
-    }
-}
-
-@Composable
-fun HeadMovieItem(imageUrl: String) {
-    Box(
-        modifier = Modifier
-            .width(LocalConfiguration.current.screenWidthDp.dp)
-            .height((LocalConfiguration.current.screenHeightDp / 2).dp)
-    ) {
-        Image(
-            painter = rememberAsyncImagePainter(imageUrl),
-            contentScale = ContentScale.FillBounds,
-            contentDescription = "Movie Poster",
-            modifier = Modifier.fillMaxSize()
-        )
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .align(Alignment.BottomCenter)
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(Color.Transparent, SoftBlack),
-                        startY = 0f,
-                        endY = Float.POSITIVE_INFINITY
-                    )
-                )
-        )
-    }
-}
-
-@Composable
-fun MovieItem(movie: Movie, onClick: () -> Unit) {
-    ElevatedCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 4.dp, vertical = 8.dp)
-            .clickable { onClick() }
-    ) {
-        Image(
-            painter = rememberAsyncImagePainter(model = movie.getFullPosterUrl()),
-            contentScale = ContentScale.FillBounds,
-            contentDescription = "Movie Poster",
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(2f/3f)
-        )
     }
 }
