@@ -31,7 +31,7 @@ fun NavScreen(navController: NavHostController, paddingValues: PaddingValues) {
         }
         composable("category_see_all/{genreId}/{genreName}") { backStackEntry ->
             val genreId = backStackEntry.arguments?.getString("genreId")?.toIntOrNull() ?: 0
-            val genreName = backStackEntry.arguments?.getString("genreName")?.toIntOrNull() ?: ""
+            val genreName = backStackEntry.arguments?.getString("genreName") ?: ""
             CategorySeeAllScreen(navController=navController, genreId=genreId, genreName=genreName)
         }
     }
