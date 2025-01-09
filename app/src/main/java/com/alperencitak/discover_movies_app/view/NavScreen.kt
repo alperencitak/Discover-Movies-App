@@ -29,5 +29,10 @@ fun NavScreen(navController: NavHostController, paddingValues: PaddingValues) {
             val movieId = backStackEntry.arguments?.getString("movieId")?.toIntOrNull() ?: 0
             MovieDetailScreen(movieId = movieId)
         }
+        composable("category_see_all/{genreId}/{genreName}") { backStackEntry ->
+            val genreId = backStackEntry.arguments?.getString("genreId")?.toIntOrNull() ?: 0
+            val genreName = backStackEntry.arguments?.getString("genreName")?.toIntOrNull() ?: ""
+            CategorySeeAllScreen(navController=navController, genreId=genreId, genreName=genreName)
+        }
     }
 }
