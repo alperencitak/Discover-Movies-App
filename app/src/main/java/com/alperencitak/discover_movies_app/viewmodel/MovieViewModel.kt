@@ -39,7 +39,7 @@ class MovieViewModel @Inject constructor(
     fun getMovies(page: Int) {
         viewModelScope.launch {
             try {
-                _movies.value = repository.fetchMovies(page=page)
+                _movies.value += repository.fetchMovies(page=page)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -74,7 +74,7 @@ class MovieViewModel @Inject constructor(
             try {
                 val movieListByGenreId = repository.fetchMoviesByGenre(page, genreId)
                 _moviesByGenre.value = _moviesByGenre.value.toMutableMap().apply {
-                    this[genreId] = movieListByGenreId
+                    this[genreId] = (this[genreId]?: emptyList()) + movieListByGenreId
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
