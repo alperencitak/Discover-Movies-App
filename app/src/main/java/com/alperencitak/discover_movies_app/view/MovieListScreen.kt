@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -52,8 +53,17 @@ fun MovieListScreen(navController: NavHostController) {
     var currentImageUrl by remember {
         mutableStateOf<String?>(null)
     }
+    var currentPage by remember { mutableIntStateOf(1) }
+    var isLoadingMore by remember { mutableStateOf(false) }
 
-    movieViewModel.getMovies(1)
+
+    LaunchedEffect(currentPage) {
+        if(!isLoadingMore){
+            isLoadingMore = true
+            movieViewModel.getMovies(currentPage)
+            isLoadingMore = false
+        }
+    }
 
     if (movies.isNotEmpty()) {
         LaunchedEffect(movies) {
@@ -95,6 +105,14 @@ fun MovieListScreen(navController: NavHostController) {
                 items(movies) { movie ->
                     MovieItem(movie = movie) {
                         navController.navigate("movie_detail/${movie.id}")
+                    }
+                }
+
+                item{
+                    if(!isLoadingMore){
+                        LaunchedEffect(Unit) {
+                            currentPage++
+                        }
                     }
                 }
             }
