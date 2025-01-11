@@ -10,8 +10,13 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -32,7 +37,16 @@ import com.alperencitak.discover_movies_app.viewmodel.MovieViewModel
 fun CategorySeeAllScreen(navController: NavHostController, genreId: Int, genreName: String) {
     val movieViewModel: MovieViewModel = hiltViewModel()
     val moviesByGenre by movieViewModel.moviesByGenre.collectAsState()
-    movieViewModel.getMoviesByGenre(page = 1, genreId=genreId)
+    var isLoadingMore by remember { mutableStateOf(false) }
+    var currentPage by remember { mutableIntStateOf(1) }
+
+    LaunchedEffect(currentPage) {
+        if(!isLoadingMore){
+            isLoadingMore = true
+            movieViewModel.getMoviesByGenre(page = currentPage, genreId=genreId)
+            isLoadingMore = false
+        }
+    }
 
     val nunito = FontFamily(
         Font(R.font.nunito_black)
@@ -52,16 +66,24 @@ fun CategorySeeAllScreen(navController: NavHostController, genreId: Int, genreNa
                 fontWeight = FontWeight.Bold,
                 color = SoftRed,
                 fontSize = 20.sp,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(top = 64.dp),
                 textAlign = TextAlign.Center
             )
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
-                modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 32.dp),
+                modifier = Modifier.fillMaxSize().padding(start = 16.dp, end = 16.dp, bottom = 32.dp, top = 96.dp),
             ) {
                 items(movies){ movie ->
                     MovieItem(movie) {
                         navController.navigate("movie_detail/${movie.id}")
+                    }
+                }
+
+                item{
+                    if(!isLoadingMore){
+                        LaunchedEffect(Unit) {
+                            currentPage++
+                        }
                     }
                 }
             }
