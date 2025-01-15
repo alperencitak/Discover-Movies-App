@@ -34,5 +34,8 @@ fun NavScreen(navController: NavHostController, paddingValues: PaddingValues) {
             val genreName = backStackEntry.arguments?.getString("genreName") ?: ""
             CategorySeeAllScreen(navController=navController, genreId=genreId, genreName=genreName)
         }
+        composable("favorites") {
+            FavoriteMoviesScreen(navController=navController)
+        }
     }
 }
