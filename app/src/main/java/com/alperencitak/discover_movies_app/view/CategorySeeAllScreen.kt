@@ -52,14 +52,15 @@ fun CategorySeeAllScreen(navController: NavHostController, genreId: Int, genreNa
         Font(R.font.nunito_black)
     )
 
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(SoftBlack)
+    )
+
     if(moviesByGenre.isNotEmpty()){
         val movies = moviesByGenre[genreId] ?: emptyList()
         if(movies.isNotEmpty()){
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(SoftBlack)
-            )
             Text(
                 text = genreName,
                 fontFamily = nunito,
