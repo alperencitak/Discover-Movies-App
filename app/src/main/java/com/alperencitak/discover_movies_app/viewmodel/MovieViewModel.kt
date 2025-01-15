@@ -59,6 +59,23 @@ class MovieViewModel @Inject constructor(
         }
     }
 
+    fun getFavoriteMovies(favoriteIds: Set<String>){
+        viewModelScope.launch {
+            try {
+                _loading.value = true
+                val list = emptyList<Movie>().toMutableList()
+                favoriteIds.forEach { favoriteId ->
+                     list += repository.fetchMovie(favoriteId.toInt()).movie
+                }
+                _movies.value = list
+            } catch (e: Exception){
+                e.printStackTrace()
+            } finally {
+                _loading.value = false
+            }
+        }
+    }
+
     fun getLatestMovies(page: Int) {
         viewModelScope.launch {
             try {
