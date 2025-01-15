@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -91,6 +92,20 @@ fun ScaffoldWithNavBar(){
                             }
                         },
                         icon = { Icon(Icons.Default.Search, contentDescription = "Search Icon") },
+                        colors = NavigationBarItemDefaults.colors(
+                            indicatorColor = SoftRed,
+                            selectedIconColor = SoftBlack,
+                            unselectedIconColor = SoftRed
+                        )
+                    )
+                    NavigationBarItem(
+                        selected = currentRoute == "favorites",
+                        onClick = {
+                            if(currentRoute != "favorites"){
+                                navController.navigate("favorites")
+                            }
+                        },
+                        icon = { Icon(Icons.Default.Star, contentDescription = "favorites Icon") },
                         colors = NavigationBarItemDefaults.colors(
                             indicatorColor = SoftRed,
                             selectedIconColor = SoftBlack,
