@@ -46,10 +46,14 @@ fun MovieCategoryScreen(navController: NavHostController) {
 
     val moviesViewModel: MovieViewModel = hiltViewModel()
     val moviesByGenre by moviesViewModel.moviesByGenre.collectAsState()
+    val topRatedMovies by moviesViewModel.topRatedMovies.collectAsState()
+    val trendingMoviesWeek by moviesViewModel.trendingMovies.collectAsState()
     val genres by moviesViewModel.genres.collectAsState()
     val genreList = listOf(28, 878, 16, 35, 27, 14, 80, 12, 18, 10751, 9648, 10749, 53, 10752)
 
     moviesViewModel.getMovieGenres()
+    moviesViewModel.getTopRatedMovies(1)
+    moviesViewModel.getTrendingMovies(1, "week")
     genreList.forEach { genreId ->
         moviesViewModel.getMoviesByGenre(1, genreId)
     }
@@ -70,6 +74,12 @@ fun MovieCategoryScreen(navController: NavHostController) {
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Center
         ) {
+            ListRow("Top Rated", topRatedMovies, onClick = { movieId ->
+                navController.navigate("movie_detail/$movieId")
+            }, onSeeAllClick = {})
+            ListRow("Week's Trends", trendingMoviesWeek, onClick = { movieId ->
+                navController.navigate("movie_detail/$movieId")
+            }, onSeeAllClick = {})
             genreList.forEach { genreId ->
                 val movies = moviesByGenre[genreId] ?: emptyList()
                 val genreName = genres.find { it.id == genreId }?.name ?: ""
