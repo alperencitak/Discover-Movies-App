@@ -23,6 +23,14 @@ class MovieRepository @Inject constructor(
         return movie
     }
 
+    suspend fun fetchTopRatedMovies(page: Int): List<Movie>{
+        return api.getTopRatedMovies(page=page).results
+    }
+
+    suspend fun fetchTrendingMoviesToday(page: Int, timeWindow: String): List<Movie>{
+        return api.getTrendingMoviesToday(page=page, timeWindow=timeWindow).results
+    }
+
     suspend fun fetchLatestMovies(page: Int): List<Movie> {
         return api.getLatestMovies(page=page).results
     }
