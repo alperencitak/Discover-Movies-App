@@ -2,6 +2,7 @@ package com.alperencitak.discover_movies_app.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.Font
@@ -65,17 +67,26 @@ fun FavoriteMoviesScreen(navController: NavHostController) {
         ) {
             items(movies) { movie ->
                 Box(
-                    modifier = Modifier.fillMaxWidth().aspectRatio(3f/2f).padding(vertical = 32.dp)
-                ){
-                    Row {
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(3f / 2f)
+                        .padding(vertical = 16.dp)
+                        .clickable {
+                            navController.navigate("movie_detail/${movie.id}")
+                        }
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 8.dp)
+                    ) {
                         Image(
                             painter = rememberAsyncImagePainter(model = movie.getFullPosterUrl()),
                             contentDescription = "Movie Poster",
                             contentScale = ContentScale.FillBounds,
                             modifier = Modifier
                                 .fillMaxHeight()
-                                .aspectRatio(2.5f/3f)
-                                .padding(start = 16.dp, end = 32.dp)
+                                .aspectRatio(2.5f / 3f)
+                                .padding(end = 16.dp)
+                                .scale(0.8f)
                         )
                         Column(
                             modifier = Modifier.padding(vertical = 16.dp)
