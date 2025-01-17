@@ -23,6 +23,12 @@ class MovieViewModel @Inject constructor(
     private val _movie = MutableStateFlow<MovieWithDetails?>(null)
     val movie: StateFlow<MovieWithDetails?> = _movie
 
+    private val _topRatedMovies = MutableStateFlow<List<Movie>>(emptyList())
+    val topRatedMovies: StateFlow<List<Movie>> = _topRatedMovies
+
+    private val _trendingMovies = MutableStateFlow<List<Movie>>(emptyList())
+    val trendingMovies: StateFlow<List<Movie>> = _trendingMovies
+
     private val _moviesByGenre = MutableStateFlow<Map<Int, List<Movie>>>(emptyMap())
     val moviesByGenre: StateFlow<Map<Int, List<Movie>>> = _moviesByGenre
 
@@ -39,19 +45,19 @@ class MovieViewModel @Inject constructor(
     fun getMovies(page: Int) {
         viewModelScope.launch {
             try {
-                _movies.value += repository.fetchMovies(page=page)
+                _movies.value += repository.fetchMovies(page = page)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
     }
 
-    fun getMovie(movieId: Int){
+    fun getTopRatedMovies(page: Int) {
         viewModelScope.launch {
             try {
                 _loading.value = true
-                _movie.value = repository.fetchMovie(movieId)
-            } catch (e: Exception){
+                _topRatedMovies.value += repository.fetchTopRatedMovies(page = page)
+            } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
                 _loading.value = false
@@ -59,16 +65,45 @@ class MovieViewModel @Inject constructor(
         }
     }
 
-    fun getFavoriteMovies(favoriteIds: Set<String>){
+    fun getTrendingMovies(page: Int, timeWindow: String) {
+        viewModelScope.launch {
+            try {
+                _loading.value = true
+                _trendingMovies.value += repository.fetchTrendingMoviesToday(
+                    page = page,
+                    timeWindow = timeWindow
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _loading.value = false
+            }
+        }
+    }
+
+    fun getMovie(movieId: Int) {
+        viewModelScope.launch {
+            try {
+                _loading.value = true
+                _movie.value = repository.fetchMovie(movieId)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _loading.value = false
+            }
+        }
+    }
+
+    fun getFavoriteMovies(favoriteIds: Set<String>) {
         viewModelScope.launch {
             try {
                 _loading.value = true
                 val list = emptyList<Movie>().toMutableList()
                 favoriteIds.forEach { favoriteId ->
-                     list += repository.fetchMovie(favoriteId.toInt()).movie
+                    list += repository.fetchMovie(favoriteId.toInt()).movie
                 }
                 _movies.value = list
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
                 _loading.value = false
@@ -79,19 +114,19 @@ class MovieViewModel @Inject constructor(
     fun getLatestMovies(page: Int) {
         viewModelScope.launch {
             try {
-                _movies.value = repository.fetchLatestMovies(page=page)
+                _movies.value = repository.fetchLatestMovies(page = page)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
     }
 
-    fun getMoviesByGenre(page: Int, genreId: Int){
+    fun getMoviesByGenre(page: Int, genreId: Int) {
         viewModelScope.launch {
             try {
                 val movieListByGenreId = repository.fetchMoviesByGenre(page, genreId)
                 _moviesByGenre.value = _moviesByGenre.value.toMutableMap().apply {
-                    this[genreId] = (this[genreId]?: emptyList()) + movieListByGenreId
+                    this[genreId] = (this[genreId] ?: emptyList()) + movieListByGenreId
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -99,7 +134,7 @@ class MovieViewModel @Inject constructor(
         }
     }
 
-    fun getMovieGenres(){
+    fun getMovieGenres() {
         viewModelScope.launch {
             try {
                 _genres.value = repository.fetchGenres()
