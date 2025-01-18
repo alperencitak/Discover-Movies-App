@@ -23,7 +23,7 @@ import com.alperencitak.discover_movies_app.ui.theme.SoftRed
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainSearchBar(){
+fun MainSearchBar(onSearch: (String) -> Unit){
     var query by remember { mutableStateOf("") }
     var isExpanded by remember { mutableStateOf(false) }
 
@@ -31,7 +31,10 @@ fun MainSearchBar(){
         inputField = {
             TextField(
                 value = query,
-                onValueChange = { query = it },
+                onValueChange = {
+                    query = it
+                    onSearch(query)
+                },
                 placeholder = { Text("Search...") },
                 modifier = Modifier.fillMaxWidth(),
                 colors = TextFieldDefaults.colors(
