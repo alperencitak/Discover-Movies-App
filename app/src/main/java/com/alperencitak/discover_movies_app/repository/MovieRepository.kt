@@ -43,4 +43,8 @@ class MovieRepository @Inject constructor(
         return api.getMovieGenres().genres
     }
 
+    suspend fun searchMovie(query: String, page: Int): List<Movie> {
+        return api.searchMovie(query = query, page = page).results
+    }
+
 }
