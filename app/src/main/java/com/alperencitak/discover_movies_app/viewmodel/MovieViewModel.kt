@@ -81,6 +81,26 @@ class MovieViewModel @Inject constructor(
         }
     }
 
+    fun searchMovie(query: String, page: Int) {
+        viewModelScope.launch {
+            if(query.isEmpty()){
+                getMovies(1)
+            }else{
+                try {
+                    _loading.value = true
+                    _movies.value = repository.searchMovie(
+                        query = query,
+                        page = page
+                    )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                } finally {
+                    _loading.value = false
+                }
+            }
+        }
+    }
+
     fun getMovie(movieId: Int) {
         viewModelScope.launch {
             try {
