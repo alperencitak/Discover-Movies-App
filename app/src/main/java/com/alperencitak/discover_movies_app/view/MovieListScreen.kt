@@ -73,7 +73,9 @@ fun MovieListScreen(navController: NavHostController) {
             horizontalArrangement = Arrangement.End
         ) {
             if(isSearch){
-                MainSearchBar()
+                MainSearchBar(){ query ->
+                    movieViewModel.searchMovie(query, 1)
+                }
             }
             Box(
                 modifier = Modifier.clickable {
