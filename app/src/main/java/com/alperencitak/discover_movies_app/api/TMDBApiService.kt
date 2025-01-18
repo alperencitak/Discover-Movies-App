@@ -63,6 +63,14 @@ interface TMDBApiService {
         @Query("page") page: Int
     ): MovieResponse
 
+    @GET("search/movie")
+    suspend fun searchMovie(
+        @Query("api_key") apiKey: String = BuildConfig.API_KEY,
+        @Query("query") query: String,
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int
+    ): MovieResponse
+
     @GET("discover/movie")
     suspend fun getMoviesByGenre(
         @Query("api_key") apiKey: String = BuildConfig.API_KEY,
