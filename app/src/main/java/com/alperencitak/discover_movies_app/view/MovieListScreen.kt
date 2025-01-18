@@ -3,9 +3,11 @@ package com.alperencitak.discover_movies_app.view
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,7 +16,9 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SearchBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -36,6 +40,7 @@ import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
 import com.alperencitak.discover_movies_app.utils.CircularLoadingScreen
 import com.alperencitak.discover_movies_app.utils.HeadMovieItem
+import com.alperencitak.discover_movies_app.utils.MainSearchBar
 import com.alperencitak.discover_movies_app.utils.MovieItem
 import com.alperencitak.discover_movies_app.viewmodel.MovieViewModel
 import kotlinx.coroutines.delay
@@ -50,6 +55,7 @@ fun MovieListScreen(navController: NavHostController) {
     }
     var currentPage by remember { mutableIntStateOf(1) }
     var isLoadingMore by remember { mutableStateOf(false) }
+    var isSearch by remember { mutableStateOf(false) }
 
     movieViewModel.getTrendingMovies(1, "day")
     LaunchedEffect(currentPage) {
@@ -61,6 +67,29 @@ fun MovieListScreen(navController: NavHostController) {
     }
 
     if (movies.isNotEmpty()) {
+
+        Row(
+            modifier = Modifier.fillMaxWidth().zIndex(2f),
+            horizontalArrangement = Arrangement.End
+        ) {
+            if(isSearch){
+                MainSearchBar()
+            }
+            Box(
+                modifier = Modifier.clickable {
+                    isSearch = !isSearch
+                },
+                contentAlignment = Alignment.TopEnd
+            ){
+                Icon(
+                    Icons.Default.Search,
+                    contentDescription = "Search Icon",
+                    tint = SoftRed,
+                    modifier = Modifier.padding(top = 48.dp, end = 32.dp).scale(1.5f).zIndex(1f)
+                )
+            }
+        }
+
         LaunchedEffect(movies) {
             if (movies.isNotEmpty() && currentImageUrl == null) {
                 currentImageUrl = movies.take(15).shuffled().first().getFullPosterUrl()
@@ -72,17 +101,6 @@ fun MovieListScreen(navController: NavHostController) {
                 delay(5000)
                 currentImageUrl = trendingMoviesToday.take(10).shuffled().first().getFullPosterUrl()
             }
-        }
-        Box(
-            modifier = Modifier.fillMaxWidth().zIndex(2f),
-            contentAlignment = Alignment.TopEnd
-        ){
-            Icon(
-                Icons.Default.Search,
-                contentDescription = "Search Icon",
-                tint = SoftRed,
-                modifier = Modifier.align(Alignment.CenterEnd).padding(top = 64.dp, end = 32.dp).scale(1.5f)
-            )
         }
         Box(
             modifier = Modifier
