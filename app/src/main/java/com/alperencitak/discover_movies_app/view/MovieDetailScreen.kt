@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -154,7 +155,7 @@ fun MovieDetailScreen(movieId: Int = 1) {
                     shape = androidx.compose.foundation.shape.AbsoluteCutCornerShape(0)
                 ) {
                     Text(
-                        text = "TRAILER",
+                        text = stringResource(R.string.trailer),
                         color = SoftBlack,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
@@ -195,7 +196,7 @@ fun MovieDetailScreen(movieId: Int = 1) {
             ) {
                 Text(
                     color = SoftRed,
-                    text = "Actors",
+                    text = stringResource(R.string.actors),
                     fontSize = 20.sp,
                     fontFamily = nunito
                 )

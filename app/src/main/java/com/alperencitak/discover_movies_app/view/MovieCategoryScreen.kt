@@ -25,6 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -77,10 +78,10 @@ fun MovieCategoryScreen(navController: NavHostController) {
             val topRatedMoviesList = topRatedMovies.filter { it.poster_path != null }
             val trendingMoviesWeekList = trendingMoviesWeek.filter { it.poster_path != null }
 
-            ListRow("Top Rated", topRatedMoviesList, onClick = { movieId ->
+            ListRow(stringResource(R.string.top_rated), topRatedMoviesList, onClick = { movieId ->
                 navController.navigate("movie_detail/$movieId")
             }, onSeeAllClick = {})
-            ListRow("Week's Trends", trendingMoviesWeekList, onClick = { movieId ->
+            ListRow(stringResource(R.string.week_trends), trendingMoviesWeekList, onClick = { movieId ->
                 navController.navigate("movie_detail/$movieId")
             }, onSeeAllClick = {})
             genreList.forEach { genreId ->

@@ -17,7 +17,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.alperencitak.discover_movies_app.R
 import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
 import com.alperencitak.discover_movies_app.ui.theme.SoftGray
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
@@ -36,7 +38,7 @@ fun MainSearchBar(onSearch: (String) -> Unit){
                     query = it
                     onSearch(query)
                 },
-                placeholder = { Text("Search...") },
+                placeholder = { Text(stringResource(R.string.search)) },
                 modifier = Modifier.fillMaxWidth(),
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = SoftBlack,
