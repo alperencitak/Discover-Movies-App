@@ -127,7 +127,8 @@ fun MovieListScreen(navController: NavHostController) {
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 contentPadding = PaddingValues(top = (LocalConfiguration.current.screenHeightDp / 2.5).dp)
             ) {
-                items(movies) { movie ->
+                val movieList = movies.filter { it.poster_path != null }
+                items(movieList) { movie ->
                     MovieItem(movie = movie) {
                         navController.navigate("movie_detail/${movie.id}")
                     }

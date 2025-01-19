@@ -74,16 +74,20 @@ fun MovieCategoryScreen(navController: NavHostController) {
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Center
         ) {
-            ListRow("Top Rated", topRatedMovies, onClick = { movieId ->
+            val topRatedMoviesList = topRatedMovies.filter { it.poster_path != null }
+            val trendingMoviesWeekList = trendingMoviesWeek.filter { it.poster_path != null }
+
+            ListRow("Top Rated", topRatedMoviesList, onClick = { movieId ->
                 navController.navigate("movie_detail/$movieId")
             }, onSeeAllClick = {})
-            ListRow("Week's Trends", trendingMoviesWeek, onClick = { movieId ->
+            ListRow("Week's Trends", trendingMoviesWeekList, onClick = { movieId ->
                 navController.navigate("movie_detail/$movieId")
             }, onSeeAllClick = {})
             genreList.forEach { genreId ->
                 val movies = moviesByGenre[genreId] ?: emptyList()
+                val movieList = movies.filter { it.poster_path != null }
                 val genreName = genres.find { it.id == genreId }?.name ?: ""
-                ListRow(genreName, movies, onClick = { movieId ->
+                ListRow(genreName, movieList, onClick = { movieId ->
                     navController.navigate("movie_detail/$movieId")
                 }, onSeeAllClick = {
                     navController.navigate("category_see_all/$genreId/$genreName")
