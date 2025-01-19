@@ -37,6 +37,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.alperencitak.discover_movies_app.R
 import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
 import com.alperencitak.discover_movies_app.ui.theme.SoftGray
+import com.alperencitak.discover_movies_app.utils.CircularLoadingScreen
 import com.alperencitak.discover_movies_app.utils.getVoteColor
 import com.alperencitak.discover_movies_app.viewmodel.MovieViewModel
 import com.alperencitak.discover_movies_app.viewmodel.ProfileViewModel
@@ -119,5 +120,7 @@ fun FavoriteMoviesScreen(navController: NavHostController) {
                 }
             }
         }
+    }else{
+        CircularLoadingScreen()
     }
 }
