@@ -28,7 +28,7 @@ fun HeadMovieItem(imageUrl: String) {
             painter = rememberAsyncImagePainter(imageUrl),
             contentScale = ContentScale.FillBounds,
             contentDescription = "Movie Poster",
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().background(SoftBlack)
         )
         Box(
             modifier = Modifier

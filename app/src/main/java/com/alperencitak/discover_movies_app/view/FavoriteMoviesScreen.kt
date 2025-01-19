@@ -88,6 +88,7 @@ fun FavoriteMoviesScreen(navController: NavHostController) {
                                 .aspectRatio(2.5f / 3f)
                                 .padding(end = 16.dp)
                                 .scale(0.8f)
+                                .background(SoftBlack)
                         )
                         Column(
                             modifier = Modifier.padding(vertical = 16.dp)

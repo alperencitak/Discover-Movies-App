@@ -1,6 +1,7 @@
 package com.alperencitak.discover_movies_app.utils
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.alperencitak.discover_movies_app.R
 import com.alperencitak.discover_movies_app.model.Movie
+import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
 
 @Composable
@@ -83,7 +85,7 @@ fun ListRow(
                         painter = rememberAsyncImagePainter(model = movie.getFullPosterUrl()),
                         contentScale = ContentScale.Crop,
                         contentDescription = "Movie Poster",
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize().background(SoftBlack)
                     )
                 }
             }
