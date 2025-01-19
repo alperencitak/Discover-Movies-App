@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
+import com.alperencitak.discover_movies_app.ui.theme.SoftGray
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,7 +47,9 @@ fun MainSearchBar(onSearch: (String) -> Unit){
                     focusedTextColor = SoftRed,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent
+                    disabledIndicatorColor = Color.Transparent,
+                    unfocusedPlaceholderColor = SoftRed,
+                    focusedPlaceholderColor = Color.Gray
                 ),
                 shape = RoundedCornerShape(16.dp)
             )
