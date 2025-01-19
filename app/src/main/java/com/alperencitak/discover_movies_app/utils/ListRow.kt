@@ -56,9 +56,9 @@ fun ListRow(
                 fontFamily = nunito
             )
             Text(
-                text = "See All",
+                text = if(title=="Top Rated" || title=="Week's Trends") "" else "See All",
                 fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
+                fontSize = 19.sp,
                 color = SoftRed,
                 fontFamily = nunito,
                 modifier = Modifier.clickable {
