@@ -246,6 +246,15 @@ fun MovieDetailScreen(movieId: Int = 1) {
                     }
                 }
             }
+            Text(
+                text = "This product uses the TMDb API but is not endorsed or certified by TMDb.",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = SoftRed,
+                fontFamily = nunito,
+                modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
