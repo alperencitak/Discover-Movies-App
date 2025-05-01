@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
@@ -59,9 +60,10 @@ fun ScaffoldWithNavBar(){
     val nunito = FontFamily(
         Font(R.font.nunito_black)
     )
+    val barRoutes = listOf("main", "search", "categories", "favorites")
     Scaffold(
         bottomBar = {
-            if(currentRoute != "movie_detail/{movieId}"){
+            if(barRoutes.contains(currentRoute)){
                 NavigationBar(
                     containerColor = SoftBlack,
                     modifier = Modifier
@@ -85,13 +87,27 @@ fun ScaffoldWithNavBar(){
                         )
                     )
                     NavigationBarItem(
+                        selected = currentRoute == "search",
+                        onClick = {
+                            if(currentRoute != "search"){
+                                navController.navigate("search")
+                            }
+                        },
+                        icon = { Icon(Icons.Default.Search, contentDescription = "Search Icon") },
+                        colors = NavigationBarItemDefaults.colors(
+                            indicatorColor = SoftRed,
+                            selectedIconColor = SoftBlack,
+                            unselectedIconColor = SoftRed
+                        )
+                    )
+                    NavigationBarItem(
                         selected = currentRoute == "categories",
                         onClick = {
                             if(currentRoute != "categories"){
                                 navController.navigate("categories")
                             }
                         },
-                        icon = { Icon(Icons.Default.Search, contentDescription = "Search Icon") },
+                        icon = { Icon(Icons.Default.Menu, contentDescription = "categories Icon") },
                         colors = NavigationBarItemDefaults.colors(
                             indicatorColor = SoftRed,
                             selectedIconColor = SoftBlack,

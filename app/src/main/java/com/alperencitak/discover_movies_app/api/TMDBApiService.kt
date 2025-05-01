@@ -1,8 +1,6 @@
 package com.alperencitak.discover_movies_app.api
 
-import androidx.compose.ui.res.stringResource
 import com.alperencitak.discover_movies_app.BuildConfig
-import com.alperencitak.discover_movies_app.R
 import com.alperencitak.discover_movies_app.model.CreditsResponse
 import com.alperencitak.discover_movies_app.model.GenreResponse
 import com.alperencitak.discover_movies_app.model.Movie
