@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -38,6 +39,8 @@ fun ListRow(
     onClick: (Int) -> Unit,
     onSeeAllClick: () -> Unit
 ) {
+    val topRatedTitle = stringResource(R.string.top_rated)
+    val weeksTrendTitle = stringResource(R.string.week_trends)
     val nunito = FontFamily(
         Font(R.font.nunito_black)
     )
@@ -59,7 +62,7 @@ fun ListRow(
                 fontFamily = nunito
             )
             Text(
-                text = if(title=="Top Rated" || title=="Week's Trends") "" else "See All",
+                text = if(title==topRatedTitle || title==weeksTrendTitle) "" else "See All",
                 fontWeight = FontWeight.Bold,
                 fontSize = 19.sp,
                 color = SoftRed,
