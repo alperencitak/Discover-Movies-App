@@ -16,11 +16,17 @@ import androidx.navigation.compose.rememberNavController
 fun NavScreen(navController: NavHostController, paddingValues: PaddingValues) {
     NavHost(
         navController = navController,
-        startDestination = "main",
+        startDestination = "intro",
         modifier = Modifier.fillMaxSize()
     ) {
+        composable("intro"){
+            IntroScreen(navController = navController)
+        }
         composable("main"){
             MovieListScreen(navController = navController)
+        }
+        composable("search"){
+            MovieSearchScreen(navController = navController)
         }
         composable("categories") {
             MovieCategoryScreen(navController = navController)
