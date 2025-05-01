@@ -1,5 +1,6 @@
 package com.alperencitak.discover_movies_app.utils
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -39,10 +40,10 @@ fun MainSearchBar(onSearch: (String) -> Unit){
                     onSearch(query)
                 },
                 placeholder = { Text(stringResource(R.string.search)) },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().background(SoftBlack),
                 colors = TextFieldDefaults.colors(
-                    focusedContainerColor = SoftBlack,
-                    unfocusedContainerColor = SoftBlack,
+                    focusedContainerColor = Color.Black,
+                    unfocusedContainerColor = Color.Black,
                     disabledContainerColor = Color.Gray,
                     errorContainerColor = Color.Red,
                     unfocusedTextColor = SoftRed,
@@ -60,12 +61,11 @@ fun MainSearchBar(onSearch: (String) -> Unit){
         onExpandedChange = { isExpanded = it },
         modifier = Modifier
             .padding(horizontal = 16.dp)
+            .background(SoftBlack)
             .fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         tonalElevation = 4.dp,
         shadowElevation = 8.dp,
         windowInsets = WindowInsets.systemBars
-    ) {
-        Text("Sonuçlar buraya gelecek.")
-    }
+    ) {}
 }
