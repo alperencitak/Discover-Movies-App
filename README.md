@@ -15,8 +15,8 @@ Retrofit
 Glide
 
 ## SCREENSHOTS
-![Image](https://github.com/user-attachments/assets/ecd1ac25-51cb-48b7-bf81-6078b079b1e4)
-![Image](https://github.com/user-attachments/assets/7387951d-ad04-48f3-8386-c6685698e08b)
-![Image](https://github.com/user-attachments/assets/f1bf239e-5d0b-48d2-b471-292bd98cd2aa)
-![Image](https://github.com/user-attachments/assets/bcc8ca24-df32-47d1-818f-c4521321ea52)
-![Image](https://github.com/user-attachments/assets/6bd4759e-20a4-43e7-a4f5-538d89085b24)
+![Image](https://github.com/user-attachments/assets/884e113c-23d6-42f7-8a7b-c2cb84d93141)
+![Image](https://github.com/user-attachments/assets/630851fa-46fe-4cd3-8f1c-d118ca268c5f)
+![Image](https://github.com/user-attachments/assets/3a1ef56c-3a69-4eaa-bcfa-b67d419856eb)
+![Image](https://github.com/user-attachments/assets/97c7f501-07a2-45cc-8bdc-d952e0161f87)
+![Image](https://github.com/user-attachments/assets/e59e1033-8c91-4fcc-a5ee-d430b6047ccb)
