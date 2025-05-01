@@ -43,7 +43,7 @@ fun CategorySeeAllScreen(navController: NavHostController, genreId: Int, genreNa
     LaunchedEffect(currentPage) {
         if(!isLoadingMore){
             isLoadingMore = true
-            movieViewModel.getMoviesByGenre(page = currentPage, genreId=genreId)
+            movieViewModel.getMoviesByGenre(page = currentPage, genreId=genreId, expandable = true)
             isLoadingMore = false
         }
     }
