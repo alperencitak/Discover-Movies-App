@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Keşfet Film Uygulaması</string>
+    <string name="app_name">Keşfet: Filmler &amp; Diziler</string>
     <string name="top_rated">En İyi Filmler</string>
     <string name="week_trends">Bu Haftanın Trendleri</string>
     <string name="trailer">FRAGMAN</string>
