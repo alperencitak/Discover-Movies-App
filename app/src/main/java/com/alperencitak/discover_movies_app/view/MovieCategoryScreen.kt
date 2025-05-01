@@ -56,7 +56,7 @@ fun MovieCategoryScreen(navController: NavHostController) {
     moviesViewModel.getTopRatedMovies(1)
     moviesViewModel.getTrendingMovies(1, "week")
     genreList.forEach { genreId ->
-        moviesViewModel.getMoviesByGenre(1, genreId)
+        moviesViewModel.getMoviesByGenre(1, genreId, expandable = false)
     }
 
     if (moviesByGenre.isEmpty()) {
