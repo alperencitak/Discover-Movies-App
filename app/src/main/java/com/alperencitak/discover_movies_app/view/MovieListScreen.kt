@@ -55,9 +55,11 @@ fun MovieListScreen(navController: NavHostController) {
     }
     var currentPage by remember { mutableIntStateOf(1) }
     var isLoadingMore by remember { mutableStateOf(false) }
-    var isSearch by remember { mutableStateOf(false) }
 
-    movieViewModel.getTrendingMovies(1, "day")
+    LaunchedEffect(Unit) {
+        movieViewModel.getTrendingMovies(1, "day")
+    }
+
     LaunchedEffect(currentPage) {
         if(!isLoadingMore){
             isLoadingMore = true
@@ -67,41 +69,15 @@ fun MovieListScreen(navController: NavHostController) {
     }
 
     if (movies.isNotEmpty()) {
-
-        Row(
-            modifier = Modifier.fillMaxWidth().zIndex(2f),
-            horizontalArrangement = Arrangement.End
-        ) {
-            if(isSearch){
-                MainSearchBar(){ query ->
-                    movieViewModel.searchMovie(query, 1)
-                }
-            }
-            Box(
-                modifier = Modifier.clickable {
-                    isSearch = !isSearch
-                },
-                contentAlignment = Alignment.TopEnd
-            ){
-                Icon(
-                    Icons.Default.Search,
-                    contentDescription = "Search Icon",
-                    tint = SoftRed,
-                    modifier = Modifier.padding(top = 48.dp, end = 32.dp).scale(1.5f).zIndex(1f)
-                )
-            }
-        }
-
-        LaunchedEffect(movies) {
-            if (movies.isNotEmpty() && currentImageUrl == null) {
-                currentImageUrl = movies.take(15).shuffled().first().getFullPosterUrl()
-            }
-        }
-
         LaunchedEffect(Unit) {
             while (true) {
+                if (trendingMoviesToday.isNotEmpty()) {
+                    currentImageUrl = trendingMoviesToday.shuffled().firstOrNull()?.getFullPosterUrl()
+                }
+                else if (movies.isNotEmpty()) {
+                    currentImageUrl = movies.shuffled().firstOrNull()?.getFullPosterUrl()
+                }
                 delay(5000)
-                currentImageUrl = trendingMoviesToday.take(10).shuffled().first().getFullPosterUrl()
             }
         }
         Box(
