@@ -35,9 +35,6 @@ import com.alperencitak.discover_movies_app.ui.theme.DiscoverMoviesAppTheme
 import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
 import com.alperencitak.discover_movies_app.ui.theme.SoftDarkBlue
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
-import com.alperencitak.discover_movies_app.view.MovieCategoryScreen
-import com.alperencitak.discover_movies_app.view.MovieDetailScreen
-import com.alperencitak.discover_movies_app.view.MovieListScreen
 import com.alperencitak.discover_movies_app.view.NavScreen
 import dagger.hilt.android.AndroidEntryPoint
 
