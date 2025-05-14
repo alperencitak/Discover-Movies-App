@@ -33,6 +33,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.alperencitak.discover_movies_app.ui.theme.DiscoverMoviesAppTheme
 import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
+import com.alperencitak.discover_movies_app.ui.theme.SoftDarkBlue
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
 import com.alperencitak.discover_movies_app.view.MovieCategoryScreen
 import com.alperencitak.discover_movies_app.view.MovieDetailScreen
@@ -65,7 +66,7 @@ fun ScaffoldWithNavBar(){
         bottomBar = {
             if(barRoutes.contains(currentRoute)){
                 NavigationBar(
-                    containerColor = SoftBlack,
+                    containerColor = SoftDarkBlue,
                     modifier = Modifier
                         .padding(horizontal = 32.dp, vertical = 14.dp)
                         .height(64.dp)
@@ -82,7 +83,7 @@ fun ScaffoldWithNavBar(){
                         icon = { Icon(Icons.Default.Home, contentDescription = "Home Icon")},
                         colors = NavigationBarItemDefaults.colors(
                             indicatorColor = SoftRed,
-                            selectedIconColor = SoftBlack,
+                            selectedIconColor = SoftDarkBlue,
                             unselectedIconColor = SoftRed
                         )
                     )
@@ -96,7 +97,7 @@ fun ScaffoldWithNavBar(){
                         icon = { Icon(Icons.Default.Search, contentDescription = "Search Icon") },
                         colors = NavigationBarItemDefaults.colors(
                             indicatorColor = SoftRed,
-                            selectedIconColor = SoftBlack,
+                            selectedIconColor = SoftDarkBlue,
                             unselectedIconColor = SoftRed
                         )
                     )
@@ -110,7 +111,7 @@ fun ScaffoldWithNavBar(){
                         icon = { Icon(Icons.Default.Menu, contentDescription = "categories Icon") },
                         colors = NavigationBarItemDefaults.colors(
                             indicatorColor = SoftRed,
-                            selectedIconColor = SoftBlack,
+                            selectedIconColor = SoftDarkBlue,
                             unselectedIconColor = SoftRed
                         )
                     )
@@ -124,7 +125,7 @@ fun ScaffoldWithNavBar(){
                         icon = { Icon(Icons.Default.Star, contentDescription = "favorites Icon") },
                         colors = NavigationBarItemDefaults.colors(
                             indicatorColor = SoftRed,
-                            selectedIconColor = SoftBlack,
+                            selectedIconColor = SoftDarkBlue,
                             unselectedIconColor = SoftRed
                         )
                     )
