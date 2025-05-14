@@ -52,7 +52,7 @@ fun CategoryMovieCard(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(225.dp)
+                    .aspectRatio(0.7f)
             )
             Surface(
                 modifier = Modifier
