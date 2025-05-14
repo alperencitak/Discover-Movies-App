@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.alperencitak.discover_movies_app.R
 import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
+import com.alperencitak.discover_movies_app.ui.theme.SoftDarkBlue
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -64,7 +65,7 @@ fun IntroScreen(navController: NavHostController) {
 
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize().background(SoftBlack)
+        modifier = Modifier.fillMaxSize().background(SoftDarkBlue)
     ){
         Image(
             painter = painterResource(R.drawable.discover_app_icon),
