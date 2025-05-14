@@ -56,6 +56,7 @@ fun MovieCategoryScreen(navController: NavHostController) {
                     .padding(top = 16.dp)
                     .verticalScroll(rememberScrollState())
             ) {
+                Spacer(modifier = Modifier.height(24.dp))
                 // Top Rated
                 CategorySection(
                     title = "Top Rated Movies",
