@@ -29,9 +29,8 @@ import com.alperencitak.discover_movies_app.utils.MovieGridCard
 import com.alperencitak.discover_movies_app.viewmodel.MovieViewModel
 import com.alperencitak.discover_movies_app.viewmodel.ProfileViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavoriteMoviesScreen(navController: NavHostController) {
+fun FavoriteMoviesScreen(navController: NavHostController, paddingValues: PaddingValues) {
     val profileViewModel: ProfileViewModel = hiltViewModel()
     val movieViewModel: MovieViewModel = hiltViewModel()
     val favoriteIds by profileViewModel.favorites.collectAsState()
@@ -76,7 +75,7 @@ fun FavoriteMoviesScreen(navController: NavHostController) {
             if (movies.isEmpty()) {
                 EmptyFavoritesState(
                     nunito = nunito,
-                    onExploreClick = { navController.navigate("movie_list") }
+                    onExploreClick = { navController.navigate("main") }
                 )
             } else {
                 LazyVerticalGrid(
@@ -92,7 +91,7 @@ fun FavoriteMoviesScreen(navController: NavHostController) {
                 ) {
                     item(span = { GridItemSpan(2) }) {
                         Column(
-                            modifier = Modifier.padding(top = 32.dp)
+                            modifier = Modifier.padding(top = 48.dp)
                         ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
@@ -129,6 +128,10 @@ fun FavoriteMoviesScreen(navController: NavHostController) {
                         MovieGridCard(movie = movies[index]) {
                             navController.navigate("movie_detail/${movies[index].id}")
                         }
+                    }
+
+                    item(span = { GridItemSpan(2) }){
+                        Spacer(modifier = Modifier.height(paddingValues.calculateBottomPadding()))
                     }
                 }
             }
