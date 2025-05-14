@@ -34,7 +34,7 @@ fun NavScreen(navController: NavHostController, paddingValues: PaddingValues) {
         }
         composable("movie_detail/{movieId}") { backStackEntry ->
             val movieId = backStackEntry.arguments?.getString("movieId")?.toIntOrNull() ?: 0
-            MovieDetailScreen(movieId = movieId)
+            MovieDetailScreen(navController = navController, movieId = movieId)
         }
         composable("category_see_all/{genreId}/{genreName}") { backStackEntry ->
             val genreId = backStackEntry.arguments?.getString("genreId")?.toIntOrNull() ?: 0
