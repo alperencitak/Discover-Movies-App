@@ -61,6 +61,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.alperencitak.discover_movies_app.model.Movie
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
+import com.alperencitak.discover_movies_app.utils.LoadingIndicator
 import com.alperencitak.discover_movies_app.utils.MovieGridCard
 import com.alperencitak.discover_movies_app.utils.TrendingMovieCard
 import com.alperencitak.discover_movies_app.utils.getVoteColor
@@ -145,17 +146,7 @@ fun MovieListScreen(navController: NavHostController) {
             when (pagedMovies.loadState.append) {
                 is LoadState.Loading -> {
                     item(span = { GridItemSpan(2) }) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator(
-                                color = SoftRed,
-                                modifier = Modifier.size(32.dp)
-                            )
-                        }
+                        LoadingIndicator()
                     }
                 }
                 is LoadState.Error -> {
