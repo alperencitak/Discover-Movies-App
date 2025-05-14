@@ -2,11 +2,16 @@ package com.alperencitak.discover_movies_app.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.alperencitak.discover_movies_app.model.Genre
 import com.alperencitak.discover_movies_app.model.Movie
 import com.alperencitak.discover_movies_app.model.MovieWithDetails
 import com.alperencitak.discover_movies_app.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,6 +21,16 @@ import javax.inject.Inject
 class MovieViewModel @Inject constructor(
     private val repository: MovieRepository
 ) : ViewModel() {
+
+    val pagedMovies: Flow<PagingData<Movie>> = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            prefetchDistance = 2,
+            enablePlaceholders = false,
+            initialLoadSize = 20
+        ),
+        pagingSourceFactory = { MoviePagingSource(repository) }
+    ).flow.cachedIn(viewModelScope)
 
     private val _movies = MutableStateFlow<List<Movie>>(emptyList())
     val movies: StateFlow<List<Movie>> = _movies
