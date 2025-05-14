@@ -42,7 +42,7 @@ fun NavScreen(navController: NavHostController, paddingValues: PaddingValues) {
             CategorySeeAllScreen(navController=navController, genreId=genreId, genreName=genreName)
         }
         composable("favorites") {
-            FavoriteMoviesScreen(navController=navController)
+            FavoriteMoviesScreen(navController=navController, paddingValues)
         }
     }
 }
