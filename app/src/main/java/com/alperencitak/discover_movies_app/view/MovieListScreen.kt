@@ -90,7 +90,7 @@ fun MovieListScreen(navController: NavHostController) {
             )
     ) {
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Fixed(3),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 12.dp),
@@ -100,7 +100,7 @@ fun MovieListScreen(navController: NavHostController) {
         ) {
             // Trending Movies
             if (trendingMoviesToday.isNotEmpty()) {
-                item(span = { GridItemSpan(2) }) {
+                item(span = { GridItemSpan(3) }) {
                     Column{
                         Text(
                             text = "Trending Movies",
@@ -122,7 +122,7 @@ fun MovieListScreen(navController: NavHostController) {
                         }
                     }
                 }
-                item(span = { GridItemSpan(2) }) {
+                item(span = { GridItemSpan(3) }) {
                     Text(
                         text = "All Movies",
                         fontWeight = FontWeight.Bold,
@@ -145,12 +145,12 @@ fun MovieListScreen(navController: NavHostController) {
             // Loading
             when (pagedMovies.loadState.append) {
                 is LoadState.Loading -> {
-                    item(span = { GridItemSpan(2) }) {
+                    item(span = { GridItemSpan(3) }) {
                         LoadingIndicator()
                     }
                 }
                 is LoadState.Error -> {
-                    item(span = { GridItemSpan(2) }) {
+                    item(span = { GridItemSpan(3) }) {
                         ErrorMessage(
                             onRetry = { pagedMovies.retry() }
                         )
