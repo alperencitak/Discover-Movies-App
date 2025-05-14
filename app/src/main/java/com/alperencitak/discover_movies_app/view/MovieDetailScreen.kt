@@ -1,16 +1,10 @@
 package com.alperencitak.discover_movies_app.view
 
-import android.content.Intent
-import android.net.Uri
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,12 +15,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -39,222 +27,233 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.rememberAsyncImagePainter
 import com.alperencitak.discover_movies_app.R
 import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
-import com.alperencitak.discover_movies_app.ui.theme.SoftGray
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
-import com.alperencitak.discover_movies_app.ui.theme.SoftWhite
 import com.alperencitak.discover_movies_app.utils.CircularLoadingScreen
-import com.alperencitak.discover_movies_app.utils.getVoteColor
 import com.alperencitak.discover_movies_app.viewmodel.MovieViewModel
 import com.alperencitak.discover_movies_app.viewmodel.ProfileViewModel
+import androidx.compose.animation.*
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.alperencitak.discover_movies_app.model.*
+import com.alperencitak.discover_movies_app.ui.theme.SoftDarkBlue
+import com.alperencitak.discover_movies_app.utils.CastCard
+import com.alperencitak.discover_movies_app.utils.ChipInfo
+import com.alperencitak.discover_movies_app.utils.RatingBar
 
 @Composable
-fun MovieDetailScreen(movieId: Int = 1) {
+fun MovieDetailScreen(
+    navController: NavHostController,
+    movieId: Int
+) {
     val movieViewModel: MovieViewModel = hiltViewModel()
     val profileViewModel: ProfileViewModel = hiltViewModel()
-    val context = LocalContext.current
+    val movie by movieViewModel.movie.collectAsState()
     val favorites by profileViewModel.favorites.collectAsState()
-    val isFavorite = favorites.contains(movieId.toString())
-    val movieAsStateFlow = movieViewModel.movie.collectAsState()
-    movieViewModel.getMovie(movieId)
+    val nunito = FontFamily(Font(R.font.nunito_black))
+    var isFavorite by remember { mutableStateOf(false) }
 
-    val nunito = FontFamily(
-        Font(R.font.nunito_black)
-    )
+    LaunchedEffect(movieId) {
+        movieViewModel.getMovie(movieId)
+    }
+
+    LaunchedEffect(favorites) {
+        isFavorite = favorites.contains(movieId.toString())
+    }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(SoftBlack)
-    )
-
-    if(movieAsStateFlow.value == null){
-        CircularLoadingScreen()
-    }
-
-    movieAsStateFlow.value?.let { movie ->
-
-        val trailerKey by remember { mutableStateOf(movie.videos.firstOrNull { video -> video.type == "Trailer" }?.key) }
-        val videoTrailerUrl by remember { mutableStateOf(trailerKey?.let { key -> "https://www.youtube.com/embed/$key" }) }
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            ElevatedCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(2f / 3f)
-                    .padding(bottom = 32.dp)
-            ) {
-                Image(
-                    painter = rememberAsyncImagePainter(movie.movie.getFullPosterUrl()),
-                    contentScale = ContentScale.FillBounds,
-                    contentDescription = "Image Poster",
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp, bottom = 8.dp, start = 32.dp, end = 32.dp)
-            ) {
-                Text(
-                    text = movie.movie.genres.joinToString(" / ") { it.name },
-                    color = SoftGray,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = nunito
-                )
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp, vertical = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Button(
-                    onClick = { },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = getVoteColor(movie.movie.vote_average)
-                    ),
-                    shape = androidx.compose.foundation.shape.CircleShape
-                ) {
-                    Text(
-                        text = movie.movie.vote_average.toString(),
-                        color = SoftBlack,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = nunito
-                    )
-                }
-                Button(
-                    onClick = {
-                        videoTrailerUrl?.let { url ->
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                            context.startActivity(intent)
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = if (videoTrailerUrl != null) SoftRed else Color.DarkGray
-                    ),
-                    shape = androidx.compose.foundation.shape.AbsoluteCutCornerShape(0)
-                ) {
-                    Text(
-                        text = stringResource(R.string.trailer),
-                        color = SoftBlack,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = nunito
-                    )
-                }
-                IconButton(onClick = {
-                    if (isFavorite){
-                        profileViewModel.removeFavorite(movieId.toString())
-                    }else{
-                        profileViewModel.addFavorite(movieId.toString())
-                    }
-                }) {
-                    Icon(
-                        Icons.Default.Star,
-                        contentDescription = "Favorite Icon",
-                        tint = if (isFavorite) Color.Yellow else Color.Gray
-                    )
-                }
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp, vertical = 16.dp)
-            ) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    color = SoftGray,
-                    fontSize = 18.sp,
-                    fontFamily = nunito,
-                    text = movie.movie.overview
-                )
-            }
+            .background(SoftDarkBlue)
+    ) {
+        if (movie == null) {
+            CircularLoadingScreen()
+        } else {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
             ) {
-                Text(
-                    color = SoftRed,
-                    text = stringResource(R.string.actors),
-                    fontSize = 20.sp,
-                    fontFamily = nunito
-                )
-                HorizontalDivider(
-                    color = Color.Gray,
-                    thickness = 1.dp,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
-                LazyRow(
-                    Modifier
+                Box(
+                    modifier = Modifier
                         .fillMaxWidth()
-                        .height((LocalConfiguration.current.screenHeightDp / 3).dp)
-                        .padding(bottom = 16.dp)
+                        .height(540.dp)
                 ) {
-                    items(movie.casts) { cast ->
-                        ElevatedCard(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .width(200.dp)
-                                .padding(horizontal = 4.dp, vertical = 8.dp),
-                            colors = CardDefaults.elevatedCardColors(
-                                containerColor = SoftBlack
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(movie?.movie?.getFullPosterUrl())
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = movie?.movie?.title,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(
+                                Brush.verticalGradient(
+                                    colors = listOf(
+                                        Color.Transparent,
+                                        SoftBlack
+                                    ),
+                                    startY = 100f
+                                )
                             )
-                        ) {
-                            Text(
-                                color = SoftGray,
-                                text = cast.name,
-                                fontWeight = FontWeight.Bold,
+                    )
+
+                    IconButton(
+                        onClick = { navController.navigateUp() },
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .size(40.dp)
+                            .offset(y = 48.dp)
+                            .background(Color.Black.copy(alpha = 0.5f), CircleShape)
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = Color.White
+                        )
+                    }
+
+                    IconButton(
+                        onClick = {
+                            if (isFavorite) {
+                                profileViewModel.removeFavorite(movieId.toString())
+                            } else {
+                                profileViewModel.addFavorite(movieId.toString())
+                            }
+                            isFavorite = !isFavorite
+                        },
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .size(40.dp)
+                            .offset(y = 48.dp)
+                            .background(Color.Black.copy(alpha = 0.5f), CircleShape)
+                            .align(Alignment.TopEnd)
+                    ) {
+                        Icon(
+                            imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                            contentDescription = if (isFavorite) "Remove from favorites" else "Add to favorites",
+                            tint = if (isFavorite) SoftRed else Color.White
+                        )
+                    }
+
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(movie?.movie?.getFullPosterUrl())
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .width(140.dp)
+                            .aspectRatio(0.7f)
+                            .align(Alignment.BottomStart)
+                            .offset(y = 16.dp)
+                            .padding(start = 16.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                    )
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 32.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = movie?.movie?.title ?: "",
+                            style = MaterialTheme.typography.headlineMedium.copy(
                                 fontFamily = nunito,
-                                textAlign = TextAlign.Center,
-                                maxLines = 1,
-                                minLines = 1,
-                                fontSize = 18.sp,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(4.dp)
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            ),
+                            modifier = Modifier.weight(1f)
+                        )
+
+                        RatingBar(
+                            rating = movie?.movie?.vote_average ?: 0f
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    movie?.movie?.release_date?.take(4)?.let { year ->
+                        ChipInfo(
+                            icon = Icons.Default.DateRange,
+                            text = year,
+                            nunito = nunito
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Text(
+                        text = movie?.movie?.overview ?: "",
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            fontFamily = nunito,
+                            color = Color.White.copy(alpha = 0.7f)
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    if (!movie?.casts.isNullOrEmpty()) {
+                        Text(
+                            text = "Cast",
+                            style = MaterialTheme.typography.titleLarge.copy(
+                                fontFamily = nunito,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
                             )
-                            Image(
-                                painter = rememberAsyncImagePainter(
-                                    model = cast.getFullPosterPath()
-                                ),
-                                contentScale = ContentScale.Crop,
-                                contentDescription = "Movie Poster",
-                                modifier = Modifier.fillMaxSize()
-                            )
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        LazyRow(
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            items(movie?.casts ?: emptyList()) { cast ->
+                                CastCard(cast = cast, nunito = nunito)
+                            }
                         }
                     }
+
+                    Spacer(modifier = Modifier.height(32.dp))
+
+                    Text(
+                        text = "This product uses the TMDb API but is not endorsed or certified by TMDb.",
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            fontFamily = nunito,
+                            color = SoftRed.copy(alpha = 0.7f)
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(32.dp))
                 }
             }
-            Text(
-                text = "This product uses the TMDb API but is not endorsed or certified by TMDb.",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = SoftRed,
-                fontFamily = nunito,
-                modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
-                textAlign = TextAlign.Center
-            )
         }
     }
 }
