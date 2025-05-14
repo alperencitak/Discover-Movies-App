@@ -65,7 +65,7 @@ fun MovieSearchScreen(navController: NavHostController) {
             .background(SoftBlack)
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(top = 32.dp)
+            modifier = Modifier.fillMaxSize().padding(top = 36.dp)
         ) {
             Surface(
                 modifier = Modifier
