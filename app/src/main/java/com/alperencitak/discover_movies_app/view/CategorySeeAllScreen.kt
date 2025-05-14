@@ -6,20 +6,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -48,10 +44,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.alperencitak.discover_movies_app.R
-import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
 import com.alperencitak.discover_movies_app.utils.CategoryMovieCard
-import com.alperencitak.discover_movies_app.utils.MovieItem
 import com.alperencitak.discover_movies_app.utils.CircularLoadingScreen
 import com.alperencitak.discover_movies_app.utils.LoadingIndicator
 import com.alperencitak.discover_movies_app.viewmodel.MovieViewModel
@@ -141,7 +135,6 @@ fun CategorySeeAllScreen(
                             },
                             nunito = nunito)
 
-                        // Load more when reaching end
                         if (index == movies.size - 1 && !isLoadingMore) {
                             LaunchedEffect(Unit) {
                                 currentPage++
@@ -149,7 +142,6 @@ fun CategorySeeAllScreen(
                         }
                     }
 
-                    // Loading indicator
                     if (isLoadingMore) {
                         item(span = { GridItemSpan(2) }) {
                             LoadingIndicator()
@@ -157,7 +149,6 @@ fun CategorySeeAllScreen(
                     }
                 }
             } else {
-                // Empty State
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
