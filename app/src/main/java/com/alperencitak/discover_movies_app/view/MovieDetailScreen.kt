@@ -152,6 +152,20 @@ fun MovieDetailScreen(
                             )
                     )
 
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(
+                                Brush.verticalGradient(
+                                    colors = listOf(
+                                        SoftBlack,
+                                        Color.Transparent
+                                    ),
+                                    startY = 100f
+                                )
+                            )
+                    )
+
                     IconButton(
                         onClick = { navController.navigateUp() },
                         modifier = Modifier
