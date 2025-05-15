@@ -52,6 +52,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
@@ -78,7 +79,7 @@ fun MovieDetailScreen(
     val nunito = FontFamily(Font(R.font.nunito_black))
     var isFavorite by remember { mutableStateOf(false) }
     var isFullScreenTrailer by remember { mutableStateOf(false) }
-    var youtubeVideo by remember { mutableStateOf( movie?.videos?.find { it.site == "YouTube" && it.type == "Trailer"}) }
+    var youtubeVideo by remember { mutableStateOf(movie?.videos?.find { it.site == "YouTube" && it.type == "Trailer" }) }
     val lifecycleOwner = LocalLifecycleOwner.current
 
     LaunchedEffect(movieId) {
@@ -107,11 +108,12 @@ fun MovieDetailScreen(
                     .verticalScroll(rememberScrollState())
             ) {
                 Box(
-                    modifier = if(isFullScreenTrailer) Modifier
+                    modifier = if (isFullScreenTrailer) Modifier
                         .fillMaxSize()
+                        .clickable { isFullScreenTrailer = false }
                         .background(Color.Black.copy(0.9f)) else Modifier
                         .fillMaxWidth()
-                        .height(540.dp)
+                        .aspectRatio(16 / 9f)
                         .background(Color.Black.copy(0.9f))
                 ) {
                     if (youtubeVideo != null) {
@@ -123,7 +125,8 @@ fun MovieDetailScreen(
                                         ViewGroup.LayoutParams.MATCH_PARENT
                                     )
                                     lifecycleOwner.lifecycle.addObserver(this)
-                                    addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                                    addYouTubePlayerListener(object :
+                                        AbstractYouTubePlayerListener() {
                                         override fun onReady(youTubePlayer: YouTubePlayer) {
                                             youTubePlayer.loadVideo(youtubeVideo!!.key, 0f)
                                         }
@@ -131,7 +134,11 @@ fun MovieDetailScreen(
                                 }
                             },
                             update = { },
-                            modifier = if (isFullScreenTrailer) Modifier.fillMaxWidth().height(LocalConfiguration.current.screenHeightDp.dp) else Modifier.fillMaxWidth().height(640.dp)
+                            modifier = if (isFullScreenTrailer) Modifier
+                                .fillMaxWidth()
+                                .height(LocalConfiguration.current.screenHeightDp.dp) else Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(16 / 9f)
                         )
                     } else {
                         AsyncImage(
@@ -145,24 +152,21 @@ fun MovieDetailScreen(
                         )
                     }
 
-                    if(youtubeVideo != null){
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(
-                                    Brush.verticalGradient(
-                                        colors = listOf(
-                                            Color.Transparent,
-                                            Color.Transparent,
-                                            Color.Transparent,
-                                            SoftBlack
-                                        ),
-                                        startY = 100f
-                                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(
+                                Brush.verticalGradient(
+                                    colors = listOf(
+                                        Color.Transparent,
+                                        Color.Transparent,
+                                        SoftBlack
+                                    ),
+                                    startY = 100f
                                 )
-                                .clickable { isFullScreenTrailer = !isFullScreenTrailer }
-                        )
-                    }
+                            )
+                            .clickable { isFullScreenTrailer = true }
+                    )
 
                     Box(
                         modifier = Modifier
@@ -182,9 +186,9 @@ fun MovieDetailScreen(
 
                     IconButton(
                         onClick = {
-                            if (isFullScreenTrailer){
+                            if (isFullScreenTrailer) {
                                 isFullScreenTrailer = false
-                            }else{
+                            } else {
                                 navController.navigateUp()
                             }
                         },
@@ -194,14 +198,17 @@ fun MovieDetailScreen(
                             .offset(y = 48.dp)
                             .background(Color.Black.copy(alpha = 0.5f), CircleShape)
                     ) {
+                        val icon =
+                            if (isFullScreenTrailer) Icons.Default.KeyboardArrowUp else Icons.AutoMirrored.Filled.ArrowBack
+
                         Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            imageVector = icon,
                             contentDescription = "Back",
                             tint = Color.White
                         )
                     }
 
-                    if(!isFullScreenTrailer){
+                    if (!isFullScreenTrailer) {
                         IconButton(
                             onClick = {
                                 if (isFavorite) {
@@ -224,7 +231,17 @@ fun MovieDetailScreen(
                                 tint = if (isFavorite) SoftRed else Color.White
                             )
                         }
-
+                    }
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
                         AsyncImage(
                             model = ImageRequest.Builder(LocalContext.current)
                                 .data(movie?.movie?.getFullPosterUrl())
@@ -235,49 +252,35 @@ fun MovieDetailScreen(
                             modifier = Modifier
                                 .width(140.dp)
                                 .aspectRatio(0.7f)
-                                .align(Alignment.BottomStart)
-                                .offset(y = 16.dp)
+                                .offset(y = (-56).dp)
                                 .padding(start = 16.dp)
                                 .clip(RoundedCornerShape(12.dp))
-                                .clickable {  }
+                                .clickable { }
                         )
+
+                        Column(
+                            horizontalAlignment = Alignment.End
+                        ) {
+                            RatingBar(
+                                rating = movie?.movie?.vote_average ?: 0f
+                            )
+                            movie?.movie?.release_date?.take(4)?.let { year ->
+                                ChipInfo(
+                                    icon = Icons.Default.DateRange,
+                                    text = year,
+                                    nunito = nunito
+                                )
+                            }
+                        }
                     }
-                }
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 32.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = movie?.movie?.title ?: "",
-                            style = MaterialTheme.typography.headlineMedium.copy(
-                                fontFamily = nunito,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White
-                            ),
-                            modifier = Modifier.weight(1f)
+                    Text(
+                        text = movie?.movie?.title ?: "",
+                        style = MaterialTheme.typography.headlineMedium.copy(
+                            fontFamily = nunito,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
                         )
-
-                        RatingBar(
-                            rating = movie?.movie?.vote_average ?: 0f
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    movie?.movie?.release_date?.take(4)?.let { year ->
-                        ChipInfo(
-                            icon = Icons.Default.DateRange,
-                            text = year,
-                            nunito = nunito
-                        )
-                    }
-
+                    )
                     Spacer(modifier = Modifier.height(20.dp))
                     Text(
                         text = movie?.movie?.overview ?: "",
