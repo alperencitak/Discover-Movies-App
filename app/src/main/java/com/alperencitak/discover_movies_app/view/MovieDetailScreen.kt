@@ -1,5 +1,6 @@
 package com.alperencitak.discover_movies_app.view
 
+import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,6 +33,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.alperencitak.discover_movies_app.R
 import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
@@ -39,8 +41,6 @@ import com.alperencitak.discover_movies_app.ui.theme.SoftRed
 import com.alperencitak.discover_movies_app.utils.CircularLoadingScreen
 import com.alperencitak.discover_movies_app.viewmodel.MovieViewModel
 import com.alperencitak.discover_movies_app.viewmodel.ProfileViewModel
-import androidx.compose.animation.*
-import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -54,11 +54,14 @@ import androidx.compose.ui.graphics.Brush
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.alperencitak.discover_movies_app.model.*
 import com.alperencitak.discover_movies_app.ui.theme.SoftDarkBlue
 import com.alperencitak.discover_movies_app.utils.CastCard
 import com.alperencitak.discover_movies_app.utils.ChipInfo
 import com.alperencitak.discover_movies_app.utils.RatingBar
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+import androidx.lifecycle.compose.LocalLifecycleOwner
 
 @Composable
 fun MovieDetailScreen(
@@ -71,6 +74,8 @@ fun MovieDetailScreen(
     val favorites by profileViewModel.favorites.collectAsState()
     val nunito = FontFamily(Font(R.font.nunito_black))
     var isFavorite by remember { mutableStateOf(false) }
+    var youtubeVideo by remember { mutableStateOf( movie?.videos?.find { it.site == "YouTube" && it.type == "Trailer"}) }
+    val lifecycleOwner = LocalLifecycleOwner.current
 
     LaunchedEffect(movieId) {
         movieViewModel.getMovie(movieId)
@@ -78,6 +83,10 @@ fun MovieDetailScreen(
 
     LaunchedEffect(favorites) {
         isFavorite = favorites.contains(movieId.toString())
+    }
+
+    LaunchedEffect(movie) {
+        youtubeVideo = movie?.videos?.find { it.site == "YouTube" && it.type == "Trailer" }
     }
 
     Box(
@@ -97,16 +106,37 @@ fun MovieDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(540.dp)
+                        .background(Color.Black.copy(0.9f))
                 ) {
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(movie?.movie?.getFullPosterUrl())
-                            .crossfade(true)
-                            .build(),
-                        contentDescription = movie?.movie?.title,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize()
-                    )
+                    if (youtubeVideo != null) {
+                        AndroidView(
+                            factory = { context ->
+                                YouTubePlayerView(context).apply {
+                                    layoutParams = ViewGroup.LayoutParams(
+                                        ViewGroup.LayoutParams.MATCH_PARENT,
+                                        ViewGroup.LayoutParams.MATCH_PARENT
+                                    )
+                                    lifecycleOwner.lifecycle.addObserver(this)
+                                    addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                                        override fun onReady(youTubePlayer: YouTubePlayer) {
+                                            youTubePlayer.loadVideo(youtubeVideo!!.key, 0f)
+                                        }
+                                    })
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth().height(640.dp)
+                        )
+                    } else {
+                        AsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(movie?.movie?.getFullPosterUrl())
+                                .crossfade(true)
+                                .build(),
+                            contentDescription = movie?.movie?.title,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
 
                     Box(
                         modifier = Modifier
