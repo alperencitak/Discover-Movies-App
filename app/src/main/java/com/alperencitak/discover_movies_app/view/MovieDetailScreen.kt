@@ -2,6 +2,7 @@ package com.alperencitak.discover_movies_app.view
 
 import android.view.ViewGroup
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,6 +52,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -74,6 +77,7 @@ fun MovieDetailScreen(
     val favorites by profileViewModel.favorites.collectAsState()
     val nunito = FontFamily(Font(R.font.nunito_black))
     var isFavorite by remember { mutableStateOf(false) }
+    var isFullScreenTrailer by remember { mutableStateOf(false) }
     var youtubeVideo by remember { mutableStateOf( movie?.videos?.find { it.site == "YouTube" && it.type == "Trailer"}) }
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -102,200 +106,275 @@ fun MovieDetailScreen(
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(540.dp)
-                        .background(Color.Black.copy(0.9f))
-                ) {
-                    if (youtubeVideo != null) {
-                        AndroidView(
-                            factory = { context ->
-                                YouTubePlayerView(context).apply {
-                                    layoutParams = ViewGroup.LayoutParams(
-                                        ViewGroup.LayoutParams.MATCH_PARENT,
-                                        ViewGroup.LayoutParams.MATCH_PARENT
+                if (isFullScreenTrailer){
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Black.copy(0.9f))
+                    ) {
+                        if (youtubeVideo != null) {
+                            AndroidView(
+                                factory = { context ->
+                                    YouTubePlayerView(context).apply {
+                                        layoutParams = ViewGroup.LayoutParams(
+                                            ViewGroup.LayoutParams.MATCH_PARENT,
+                                            ViewGroup.LayoutParams.MATCH_PARENT
+                                        )
+                                        lifecycleOwner.lifecycle.addObserver(this)
+                                        addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                                            override fun onReady(youTubePlayer: YouTubePlayer) {
+                                                youTubePlayer.loadVideo(youtubeVideo!!.key, 0f)
+                                            }
+                                        })
+                                    }
+                                },
+                                modifier = Modifier.fillMaxWidth().height(LocalConfiguration.current.screenHeightDp.dp)
+                            )
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(
+                                    Brush.verticalGradient(
+                                        colors = listOf(
+                                            Color.Transparent,
+                                            SoftBlack
+                                        ),
+                                        startY = 100f
                                     )
-                                    lifecycleOwner.lifecycle.addObserver(this)
-                                    addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-                                        override fun onReady(youTubePlayer: YouTubePlayer) {
-                                            youTubePlayer.loadVideo(youtubeVideo!!.key, 0f)
-                                        }
-                                    })
-                                }
-                            },
-                            modifier = Modifier.fillMaxWidth().height(640.dp)
+                                )
                         )
-                    } else {
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(
+                                    Brush.verticalGradient(
+                                        colors = listOf(
+                                            SoftBlack,
+                                            Color.Transparent
+                                        ),
+                                        startY = 100f
+                                    )
+                                )
+                        )
+
+                        IconButton(
+                            onClick = { navController.navigateUp() },
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp, vertical = 48.dp)
+                                .size(40.dp)
+                                .offset(y = 48.dp)
+                                .background(Color.Black.copy(alpha = 0.5f), CircleShape)
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Back",
+                                tint = Color.White
+                            )
+                        }
+                    }
+                }else{
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(540.dp)
+                            .background(Color.Black.copy(0.9f))
+                    ) {
+                        if (youtubeVideo != null) {
+                            AndroidView(
+                                factory = { context ->
+                                    YouTubePlayerView(context).apply {
+                                        layoutParams = ViewGroup.LayoutParams(
+                                            ViewGroup.LayoutParams.MATCH_PARENT,
+                                            ViewGroup.LayoutParams.MATCH_PARENT
+                                        )
+                                        lifecycleOwner.lifecycle.addObserver(this)
+                                        addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                                            override fun onReady(youTubePlayer: YouTubePlayer) {
+                                                youTubePlayer.loadVideo(youtubeVideo!!.key, 0f)
+                                            }
+                                        })
+                                    }
+                                },
+                                modifier = Modifier.fillMaxWidth().height(640.dp)
+                            )
+                        } else {
+                            AsyncImage(
+                                model = ImageRequest.Builder(LocalContext.current)
+                                    .data(movie?.movie?.getFullPosterUrl())
+                                    .crossfade(true)
+                                    .build(),
+                                contentDescription = movie?.movie?.title,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+
+                        if(youtubeVideo != null){
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(
+                                        Brush.verticalGradient(
+                                            colors = listOf(
+                                                Color.Transparent,
+                                                SoftBlack
+                                            ),
+                                            startY = 100f
+                                        )
+                                    )
+                                    .clickable { isFullScreenTrailer = !isFullScreenTrailer }
+                            )
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(
+                                    Brush.verticalGradient(
+                                        colors = listOf(
+                                            SoftBlack,
+                                            Color.Transparent
+                                        ),
+                                        startY = 100f
+                                    )
+                                )
+                        )
+
+                        IconButton(
+                            onClick = { navController.navigateUp() },
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .size(40.dp)
+                                .offset(y = 48.dp)
+                                .background(Color.Black.copy(alpha = 0.5f), CircleShape)
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Back",
+                                tint = Color.White
+                            )
+                        }
+
+                        IconButton(
+                            onClick = {
+                                if (isFavorite) {
+                                    profileViewModel.removeFavorite(movieId.toString())
+                                } else {
+                                    profileViewModel.addFavorite(movieId.toString())
+                                }
+                                isFavorite = !isFavorite
+                            },
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .size(40.dp)
+                                .offset(y = 48.dp)
+                                .background(Color.Black.copy(alpha = 0.5f), CircleShape)
+                                .align(Alignment.TopEnd)
+                        ) {
+                            Icon(
+                                imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                                contentDescription = if (isFavorite) "Remove from favorites" else "Add to favorites",
+                                tint = if (isFavorite) SoftRed else Color.White
+                            )
+                        }
+
                         AsyncImage(
                             model = ImageRequest.Builder(LocalContext.current)
                                 .data(movie?.movie?.getFullPosterUrl())
                                 .crossfade(true)
                                 .build(),
-                            contentDescription = movie?.movie?.title,
+                            contentDescription = null,
                             contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize()
+                            modifier = Modifier
+                                .width(140.dp)
+                                .aspectRatio(0.7f)
+                                .align(Alignment.BottomStart)
+                                .offset(y = 16.dp)
+                                .padding(start = 16.dp)
+                                .clip(RoundedCornerShape(12.dp))
+                                .clickable {  }
                         )
                     }
-
-                    Box(
+                    Column(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .background(
-                                Brush.verticalGradient(
-                                    colors = listOf(
-                                        Color.Transparent,
-                                        SoftBlack
-                                    ),
-                                    startY = 100f
-                                )
-                            )
-                    )
-
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(
-                                Brush.verticalGradient(
-                                    colors = listOf(
-                                        SoftBlack,
-                                        Color.Transparent
-                                    ),
-                                    startY = 100f
-                                )
-                            )
-                    )
-
-                    IconButton(
-                        onClick = { navController.navigateUp() },
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .size(40.dp)
-                            .offset(y = 48.dp)
-                            .background(Color.Black.copy(alpha = 0.5f), CircleShape)
+                            .fillMaxWidth()
+                            .padding(top = 32.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
                     ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = Color.White
-                        )
-                    }
-
-                    IconButton(
-                        onClick = {
-                            if (isFavorite) {
-                                profileViewModel.removeFavorite(movieId.toString())
-                            } else {
-                                profileViewModel.addFavorite(movieId.toString())
-                            }
-                            isFavorite = !isFavorite
-                        },
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .size(40.dp)
-                            .offset(y = 48.dp)
-                            .background(Color.Black.copy(alpha = 0.5f), CircleShape)
-                            .align(Alignment.TopEnd)
-                    ) {
-                        Icon(
-                            imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                            contentDescription = if (isFavorite) "Remove from favorites" else "Add to favorites",
-                            tint = if (isFavorite) SoftRed else Color.White
-                        )
-                    }
-
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(movie?.movie?.getFullPosterUrl())
-                            .crossfade(true)
-                            .build(),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .width(140.dp)
-                            .aspectRatio(0.7f)
-                            .align(Alignment.BottomStart)
-                            .offset(y = 16.dp)
-                            .padding(start = 16.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                    )
-                }
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 32.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = movie?.movie?.title ?: "",
-                            style = MaterialTheme.typography.headlineMedium.copy(
-                                fontFamily = nunito,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White
-                            ),
-                            modifier = Modifier.weight(1f)
-                        )
-
-                        RatingBar(
-                            rating = movie?.movie?.vote_average ?: 0f
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    movie?.movie?.release_date?.take(4)?.let { year ->
-                        ChipInfo(
-                            icon = Icons.Default.DateRange,
-                            text = year,
-                            nunito = nunito
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(20.dp))
-                    Text(
-                        text = movie?.movie?.overview ?: "",
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            fontFamily = nunito,
-                            color = Color.White.copy(alpha = 0.7f)
-                        )
-                    )
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    if (!movie?.casts.isNullOrEmpty()) {
-                        Text(
-                            text = "Cast",
-                            style = MaterialTheme.typography.titleLarge.copy(
-                                fontFamily = nunito,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White
-                            )
-                        )
-                        Spacer(modifier = Modifier.height(12.dp))
-                        LazyRow(
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            items(movie?.casts ?: emptyList()) { cast ->
-                                CastCard(cast = cast, nunito = nunito)
+                            Text(
+                                text = movie?.movie?.title ?: "",
+                                style = MaterialTheme.typography.headlineMedium.copy(
+                                    fontFamily = nunito,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White
+                                ),
+                                modifier = Modifier.weight(1f)
+                            )
+
+                            RatingBar(
+                                rating = movie?.movie?.vote_average ?: 0f
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        movie?.movie?.release_date?.take(4)?.let { year ->
+                            ChipInfo(
+                                icon = Icons.Default.DateRange,
+                                text = year,
+                                nunito = nunito
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Text(
+                            text = movie?.movie?.overview ?: "",
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                fontFamily = nunito,
+                                color = Color.White.copy(alpha = 0.7f)
+                            )
+                        )
+
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        if (!movie?.casts.isNullOrEmpty()) {
+                            Text(
+                                text = "Cast",
+                                style = MaterialTheme.typography.titleLarge.copy(
+                                    fontFamily = nunito,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White
+                                )
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                            LazyRow(
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                items(movie?.casts ?: emptyList()) { cast ->
+                                    CastCard(cast = cast, nunito = nunito)
+                                }
                             }
                         }
-                    }
 
-                    Spacer(modifier = Modifier.height(32.dp))
+                        Spacer(modifier = Modifier.height(32.dp))
 
-                    Text(
-                        text = "This product uses the TMDb API but is not endorsed or certified by TMDb.",
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            fontFamily = nunito,
-                            color = SoftRed.copy(alpha = 0.7f)
+                        Text(
+                            text = "This product uses the TMDb API but is not endorsed or certified by TMDb.",
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                fontFamily = nunito,
+                                color = SoftRed.copy(alpha = 0.7f)
+                            )
                         )
-                    )
 
-                    Spacer(modifier = Modifier.height(32.dp))
+                        Spacer(modifier = Modifier.height(32.dp))
+                    }
                 }
             }
         }
