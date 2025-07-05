@@ -1,6 +1,4 @@
-package com.alperencitak.discover_movies_app.model
-
-import java.util.Date
+package com.alperencitak.discover_movies_app.domain.model
 
 data class Movie(
     val id: Int,

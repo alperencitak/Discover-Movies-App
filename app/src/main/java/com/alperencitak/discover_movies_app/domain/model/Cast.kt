@@ -1,4 +1,4 @@
-package com.alperencitak.discover_movies_app.model
+package com.alperencitak.discover_movies_app.domain.model
 
 data class Cast(
     val name: String,
