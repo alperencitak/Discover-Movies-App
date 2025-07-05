@@ -14,7 +14,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.alperencitak.discover_movies_app.model.Movie
+import com.alperencitak.discover_movies_app.domain.model.Movie
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
 
 @Composable

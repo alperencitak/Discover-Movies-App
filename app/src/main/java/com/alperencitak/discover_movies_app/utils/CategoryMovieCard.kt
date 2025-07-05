@@ -25,7 +25,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.alperencitak.discover_movies_app.model.Movie
+import com.alperencitak.discover_movies_app.domain.model.Movie
 
 @Composable
 fun CategoryMovieCard(
