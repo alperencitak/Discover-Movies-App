@@ -16,8 +16,8 @@ android {
         applicationId = "com.alperencitak.discover_movies_app"
         minSdk = 24
         targetSdk = 35
-        versionCode = 4
-        versionName = "2.1"
+        versionCode = 6
+        versionName = "3.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -77,6 +77,8 @@ dependencies {
 
     implementation(libs.androidx.paging.runtime.ktx)
     implementation(libs.androidx.paging.compose)
+
+    implementation (libs.accompanist.systemuicontroller)
 
     implementation(libs.core)
 

@@ -1,4 +1,5 @@
 [versions]
+accompanistSystemuicontroller = "0.31.4-beta"
 agp = "8.9.0-alpha03"
 coilCompose = "2.4.0"
 converterGson = "2.9.0"
@@ -19,6 +20,7 @@ pagingRuntimeKtx = "3.3.6"
 retrofit = "2.9.0"
 
 [libraries]
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
