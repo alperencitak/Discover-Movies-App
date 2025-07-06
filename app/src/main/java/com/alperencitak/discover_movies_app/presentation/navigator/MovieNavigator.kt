@@ -12,6 +12,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.alperencitak.discover_movies_app.presentation.home.HomeScreen
 import com.alperencitak.discover_movies_app.presentation.home.HomeViewModel
+import com.alperencitak.discover_movies_app.presentation.search.SearchScreen
+import com.alperencitak.discover_movies_app.presentation.search.SearchViewModel
 
 @Composable
 fun MovieNavigator() {
@@ -23,16 +25,17 @@ fun MovieNavigator() {
         val bottomPadding = it.calculateBottomPadding()
         NavHost(
             navController = navController,
-            startDestination = "home",
+            startDestination = "test",
             modifier = Modifier.padding(bottom = bottomPadding)
         ) {
             composable(
-                route = "home"
+                route = "test"
             ) {
-                val viewModel: HomeViewModel = hiltViewModel()
-                val movies = viewModel.movies.collectAsLazyPagingItems()
-                HomeScreen(
-                    movies = movies
+                val viewModel: SearchViewModel = hiltViewModel()
+                val state = viewModel.state.value
+                SearchScreen(
+                    state = state,
+                    event = viewModel::onEvent
                 )
             }
         }

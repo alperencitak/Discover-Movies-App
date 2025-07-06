@@ -6,6 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.alperencitak.discover_movies_app.data.remote.MoviesApi
 import com.alperencitak.discover_movies_app.data.remote.MoviesPagingSource
+import com.alperencitak.discover_movies_app.data.remote.SearchMoviesPagingSource
 import com.alperencitak.discover_movies_app.domain.model.Movie
 import com.alperencitak.discover_movies_app.domain.repository.MoviesRepository
 import kotlinx.coroutines.flow.Flow
@@ -27,6 +28,24 @@ class MoviesRepositoryImpl(
                 MoviesPagingSource(
                     moviesApi = moviesApi,
                     context = context
+                )
+            }
+        ).flow
+    }
+
+    override fun searchMovies(searchQuery: String): Flow<PagingData<Movie>> {
+        val pageSize = 20
+        return Pager(
+            config = PagingConfig(
+                pageSize = pageSize,
+                prefetchDistance = 3,
+                initialLoadSize = pageSize * 2
+            ),
+            pagingSourceFactory = {
+                SearchMoviesPagingSource(
+                    moviesApi = moviesApi,
+                    context = context,
+                    searchQuery = searchQuery
                 )
             }
         ).flow

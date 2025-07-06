@@ -8,4 +8,6 @@ interface MoviesRepository {
 
     fun getMovies(): Flow<PagingData<Movie>>
 
+    fun searchMovies(searchQuery: String): Flow<PagingData<Movie>>
+
 }

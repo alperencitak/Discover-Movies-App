@@ -20,6 +20,14 @@ interface MoviesApi {
         @Query("page") page: Int
     ): MovieListResponse
 
+    @GET("search/movie")
+    suspend fun searchMovie(
+        @Query("api_key") apiKey: String = BuildConfig.API_KEY,
+        @Query("query") query: String,
+        @Query("language") language: String,
+        @Query("page") page: Int
+    ): MovieListResponse
+
     @GET("movie/{movie_id}")
     suspend fun getMovie(
         @Path("movie_id") movieId: Int,
@@ -59,14 +67,6 @@ interface MoviesApi {
     suspend fun getTrendingMoviesToday(
         @Path("time_window") timeWindow: String,
         @Query("api_key") apiKey: String = BuildConfig.API_KEY,
-        @Query("language") language: String,
-        @Query("page") page: Int
-    ): MovieListResponse
-
-    @GET("search/movie")
-    suspend fun searchMovie(
-        @Query("api_key") apiKey: String = BuildConfig.API_KEY,
-        @Query("query") query: String,
         @Query("language") language: String,
         @Query("page") page: Int
     ): MovieListResponse

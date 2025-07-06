@@ -7,6 +7,7 @@ import com.alperencitak.discover_movies_app.data.repository.MoviesRepositoryImpl
 import com.alperencitak.discover_movies_app.domain.repository.MoviesRepository
 import com.alperencitak.discover_movies_app.domain.usecases.movies.GetMovies
 import com.alperencitak.discover_movies_app.domain.usecases.movies.MoviesUseCases
+import com.alperencitak.discover_movies_app.domain.usecases.movies.SearchMovies
 import com.alperencitak.discover_movies_app.util.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -49,7 +50,8 @@ object AppModule {
         moviesRepository: MoviesRepository
     ): MoviesUseCases{
         return MoviesUseCases(
-            getMovies = GetMovies(moviesRepository)
+            getMovies = GetMovies(moviesRepository),
+            searchMovies = SearchMovies(moviesRepository)
         )
     }
 
