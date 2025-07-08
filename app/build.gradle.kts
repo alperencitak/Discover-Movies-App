@@ -2,8 +2,10 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp") version libs.versions.ksp.get()
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
+    id("kotlin-parcelize")
 }
 
 val API_KEY = if (project.hasProperty("API_KEY")) project.property("API_KEY") as String else ""
@@ -64,22 +66,40 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    //Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
-    implementation(libs.androidx.datastore.preferences)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
+    //Datastore
+    implementation(libs.androidx.datastore.preferences)
+
+    //Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
+    //Compose Navigation
+    implementation (libs.androidx.navigation.compose)
+
+    //Coil
     implementation(libs.coil.compose)
 
+    //Paging
     implementation(libs.androidx.paging.runtime.ktx)
     implementation(libs.androidx.paging.compose)
 
+    //Accompanist
     implementation (libs.accompanist.systemuicontroller)
 
+    //Youtube Player
     implementation(libs.core)
+
+    //Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
+    //Other
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
 }
