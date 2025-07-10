@@ -10,6 +10,7 @@ import com.alperencitak.discover_movies_app.data.remote.MoviesApi
 import com.alperencitak.discover_movies_app.data.repository.MoviesRepositoryImpl
 import com.alperencitak.discover_movies_app.domain.repository.MoviesRepository
 import com.alperencitak.discover_movies_app.domain.usecases.movies.DeleteMovie
+import com.alperencitak.discover_movies_app.domain.usecases.movies.GetGenres
 import com.alperencitak.discover_movies_app.domain.usecases.movies.GetMovie
 import com.alperencitak.discover_movies_app.domain.usecases.movies.GetMovies
 import com.alperencitak.discover_movies_app.domain.usecases.movies.GetMoviesByGenre
@@ -91,6 +92,7 @@ object AppModule {
             searchMovies = SearchMovies(moviesRepository),
             getMoviesByGenre = GetMoviesByGenre(moviesRepository),
             getMovie = GetMovie(moviesRepository),
+            getGenres = GetGenres(moviesRepository),
             upsertMovie = UpsertMovie(moviesRepository),
             deleteMovie = DeleteMovie(moviesRepository),
             selectMovies = SelectMovies(moviesRepository),

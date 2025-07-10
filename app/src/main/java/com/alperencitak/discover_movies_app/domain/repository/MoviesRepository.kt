@@ -1,6 +1,7 @@
 package com.alperencitak.discover_movies_app.domain.repository
 
 import androidx.paging.PagingData
+import com.alperencitak.discover_movies_app.data.remote.dto.GenreResponse
 import com.alperencitak.discover_movies_app.data.remote.dto.MovieResponse
 import com.alperencitak.discover_movies_app.domain.model.Movie
 import kotlinx.coroutines.flow.Flow
@@ -12,6 +13,8 @@ interface MoviesRepository {
     fun searchMovies(searchQuery: String): Flow<PagingData<Movie>>
 
     fun getMoviesByGenre(genreId: Int): Flow<PagingData<Movie>>
+
+    suspend fun getGenres(): GenreResponse
 
     suspend fun getMovie(id: Int): MovieResponse
 

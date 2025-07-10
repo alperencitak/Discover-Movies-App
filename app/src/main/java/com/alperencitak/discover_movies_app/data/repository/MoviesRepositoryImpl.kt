@@ -9,6 +9,7 @@ import com.alperencitak.discover_movies_app.data.remote.CategorizedMoviesPagingS
 import com.alperencitak.discover_movies_app.data.remote.MoviesApi
 import com.alperencitak.discover_movies_app.data.remote.MoviesPagingSource
 import com.alperencitak.discover_movies_app.data.remote.SearchMoviesPagingSource
+import com.alperencitak.discover_movies_app.data.remote.dto.GenreResponse
 import com.alperencitak.discover_movies_app.data.remote.dto.MovieResponse
 import com.alperencitak.discover_movies_app.domain.model.Movie
 import com.alperencitak.discover_movies_app.domain.repository.MoviesRepository
@@ -86,6 +87,13 @@ class MoviesRepositoryImpl(
             crews=credits.crew
         )
         return movieResponse
+    }
+
+    override suspend fun getGenres(): GenreResponse {
+        val language = LanguageUtil.getAppLanguage(context = context)
+        return moviesApi.getMovieGenres(
+            language = language
+        )
     }
 
     override suspend fun upsert(movie: Movie) {

@@ -16,6 +16,8 @@ import com.alperencitak.discover_movies_app.data.remote.dto.MovieResponse
 import com.alperencitak.discover_movies_app.domain.model.Genre
 import com.alperencitak.discover_movies_app.domain.model.Movie
 import com.alperencitak.discover_movies_app.domain.model.Video
+import com.alperencitak.discover_movies_app.presentation.categories.CategoriesScreen
+import com.alperencitak.discover_movies_app.presentation.categories.CategoriesViewModel
 import com.alperencitak.discover_movies_app.presentation.details.DetailsEvent
 import com.alperencitak.discover_movies_app.presentation.details.DetailsScreen
 import com.alperencitak.discover_movies_app.presentation.details.DetailsViewModel
@@ -42,33 +44,44 @@ fun MovieNavigator() {
             composable(
                 route = "test"
             ) {
-                val viewModel: DetailsViewModel = hiltViewModel()
-                val movieResponse = viewModel.movieResponse
-                val isFavorite = viewModel.isFavorite
+//                val viewModel: DetailsViewModel = hiltViewModel()
+//                val movieResponse = viewModel.movieResponse
+//                val isFavorite = viewModel.isFavorite
+//
+//                val id = 986056
+//
+//                LaunchedEffect(key1 = id) {
+//                    viewModel.fetchMovie(id)
+//                    viewModel.onEvent(DetailsEvent.CheckIfFavorite(id))
+//                }
+//
+//                val youtubeVideo = remember(movieResponse) {
+//                    movieResponse?.videos?.find { it.site == "YouTube" && it.type == "Trailer" }
+//                }
+//
+//                val movie = movieResponse?.movie
+//                val casts = movieResponse?.casts
+//                val crews = movieResponse?.crews
+//
+//                DetailsScreen(
+//                    movie = movie,
+//                    trailer = youtubeVideo,
+//                    casts = casts,
+//                    crews = crews,
+//                    event = viewModel::onEvent,
+//                    isFavorite = isFavorite
+//                )
 
-                val id = 986056
+                val viewModel: CategoriesViewModel = hiltViewModel()
+                val genres = viewModel.state.value.allGenres
 
-                LaunchedEffect(key1 = id) {
-                    viewModel.fetchMovie(id)
-                    viewModel.onEvent(DetailsEvent.CheckIfFavorite(id))
+                if(genres.isNotEmpty()){
+                    CategoriesScreen(
+                        state = viewModel.state.value,
+                        event = viewModel::onEvent,
+                        categories = genres
+                    )
                 }
-
-                val youtubeVideo = remember(movieResponse) {
-                    movieResponse?.videos?.find { it.site == "YouTube" && it.type == "Trailer" }
-                }
-
-                val movie = movieResponse?.movie
-                val casts = movieResponse?.casts
-                val crews = movieResponse?.crews
-
-                DetailsScreen(
-                    movie = movie,
-                    trailer = youtubeVideo,
-                    casts = casts,
-                    crews = crews,
-                    event = viewModel::onEvent,
-                    isFavorite = isFavorite
-                )
             }
         }
     }

@@ -9,7 +9,7 @@ class GetMoviesByGenre(
     private val moviesRepository: MoviesRepository
 ) {
 
-    suspend operator fun invoke(genreId: Int): Flow<PagingData<Movie>>{
+    operator fun invoke(genreId: Int): Flow<PagingData<Movie>>{
         return moviesRepository.getMoviesByGenre(genreId)
     }
 
