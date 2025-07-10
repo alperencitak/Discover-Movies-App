@@ -11,6 +11,8 @@ interface MoviesRepository {
 
     fun searchMovies(searchQuery: String): Flow<PagingData<Movie>>
 
+    fun getMoviesByGenre(genreId: Int): Flow<PagingData<Movie>>
+
     suspend fun getMovie(id: Int): MovieResponse
 
     suspend fun upsert(movie: Movie)

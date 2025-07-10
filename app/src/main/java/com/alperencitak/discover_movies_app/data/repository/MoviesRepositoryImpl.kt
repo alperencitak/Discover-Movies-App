@@ -5,6 +5,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.alperencitak.discover_movies_app.data.local.MoviesDao
+import com.alperencitak.discover_movies_app.data.remote.CategorizedMoviesPagingSource
 import com.alperencitak.discover_movies_app.data.remote.MoviesApi
 import com.alperencitak.discover_movies_app.data.remote.MoviesPagingSource
 import com.alperencitak.discover_movies_app.data.remote.SearchMoviesPagingSource
@@ -50,6 +51,24 @@ class MoviesRepositoryImpl(
                     moviesApi = moviesApi,
                     context = context,
                     searchQuery = searchQuery
+                )
+            }
+        ).flow
+    }
+
+    override fun getMoviesByGenre(genreId: Int): Flow<PagingData<Movie>> {
+        val pageSize = 20
+        return Pager(
+            config = PagingConfig(
+                pageSize = pageSize,
+                prefetchDistance = 3,
+                initialLoadSize = pageSize * 2
+            ),
+            pagingSourceFactory = {
+                CategorizedMoviesPagingSource(
+                    moviesApi = moviesApi,
+                    context = context,
+                    genreId = genreId
                 )
             }
         ).flow

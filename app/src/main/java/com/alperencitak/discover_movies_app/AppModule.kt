@@ -12,6 +12,7 @@ import com.alperencitak.discover_movies_app.domain.repository.MoviesRepository
 import com.alperencitak.discover_movies_app.domain.usecases.movies.DeleteMovie
 import com.alperencitak.discover_movies_app.domain.usecases.movies.GetMovie
 import com.alperencitak.discover_movies_app.domain.usecases.movies.GetMovies
+import com.alperencitak.discover_movies_app.domain.usecases.movies.GetMoviesByGenre
 import com.alperencitak.discover_movies_app.domain.usecases.movies.IsMovieFavorite
 import com.alperencitak.discover_movies_app.domain.usecases.movies.MoviesUseCases
 import com.alperencitak.discover_movies_app.domain.usecases.movies.SearchMovies
@@ -88,6 +89,7 @@ object AppModule {
         return MoviesUseCases(
             getMovies = GetMovies(moviesRepository),
             searchMovies = SearchMovies(moviesRepository),
+            getMoviesByGenre = GetMoviesByGenre(moviesRepository),
             getMovie = GetMovie(moviesRepository),
             upsertMovie = UpsertMovie(moviesRepository),
             deleteMovie = DeleteMovie(moviesRepository),
