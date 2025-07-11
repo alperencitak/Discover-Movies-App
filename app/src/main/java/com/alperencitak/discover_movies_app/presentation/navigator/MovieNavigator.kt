@@ -135,8 +135,10 @@ fun MovieNavigator() {
             ) {
                 val viewModel: HomeViewModel = hiltViewModel()
                 val movies = viewModel.movies.collectAsLazyPagingItems()
+                val topRatedMovies = viewModel.topRatedMovies.collectAsLazyPagingItems()
                 HomeScreen(
                     movies = movies,
+                    topRatedMovies = topRatedMovies,
                     navigateToDetails = { movie ->
                         navigateToDetails(
                             navController = navController,

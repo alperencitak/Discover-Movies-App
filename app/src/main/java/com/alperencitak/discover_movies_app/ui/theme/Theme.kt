@@ -29,12 +29,12 @@ private val DarkColorScheme = darkColorScheme(
 private val LightColorScheme = lightColorScheme(
     primary = CinematicRed,
     onPrimary = CinematicWhite,
-    secondary = CinematicBlack,
+    secondary = CinematicLightGray,
     onSecondary = CinematicWhite,
-    background = CinematicOffWhite,
-    onBackground = CinematicBlack,
-    surface = Color.White,
-    onSurface = CinematicBlack,
+    background = CinematicBlack,
+    onBackground = CinematicWhite,
+    surface = CinematicDarkGray,
+    onSurface = CinematicWhite,
     tertiary = CinematicRed,
     onTertiary = CinematicWhite
 )

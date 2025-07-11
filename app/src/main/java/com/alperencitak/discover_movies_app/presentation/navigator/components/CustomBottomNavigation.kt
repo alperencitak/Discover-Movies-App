@@ -3,7 +3,9 @@ package com.alperencitak.discover_movies_app.presentation.navigator.components
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -26,7 +28,7 @@ fun CustomBottomNavigation(
 ) {
 
     NavigationBar(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().height(84.dp).statusBarsPadding(),
         containerColor = MaterialTheme.colorScheme.background,
         tonalElevation = 10.dp
     ) {
@@ -38,7 +40,7 @@ fun CustomBottomNavigation(
                     Icon(
                         painter = painterResource(item.icon),
                         contentDescription = null,
-                        modifier = Modifier.size(36.dp)
+                        modifier = Modifier.size(24.dp)
                     )
 //                    Column(
 //                        horizontalAlignment = Alignment.CenterHorizontally

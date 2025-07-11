@@ -9,9 +9,11 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -39,6 +41,7 @@ import com.alperencitak.discover_movies_app.utils.getVoteColor
 @Composable
 fun HomeScreen(
     movies: LazyPagingItems<Movie>,
+    topRatedMovies: LazyPagingItems<Movie>,
     navigateToDetails: (Movie) -> Unit
 ) {
 
@@ -63,6 +66,30 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+
+            item(span = { GridItemSpan(3) }) {
+                Text(
+                    text = "Top Rated Movies",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    color = Color.White,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+            }
+
+            item(span = { GridItemSpan(3) }) {
+                LazyRow(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(count = topRatedMovies.itemCount){
+                        topRatedMovies[it]?.let { movie ->
+                            MovieGridCard(movie = movie, onClick = { navigateToDetails(movie) })
+                        }
+                    }
+                }
+            }
+
             item(span = { GridItemSpan(3) }) {
                 Text(
                     text = "All Movies",

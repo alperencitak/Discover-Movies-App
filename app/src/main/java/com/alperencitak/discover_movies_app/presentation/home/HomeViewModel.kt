@@ -14,4 +14,6 @@ class HomeViewModel @Inject constructor(
 
     val movies = moviesUseCases.getMovies().cachedIn(viewModelScope)
 
+    val topRatedMovies = moviesUseCases.getTopRatedMovies().cachedIn(viewModelScope)
+
 }
