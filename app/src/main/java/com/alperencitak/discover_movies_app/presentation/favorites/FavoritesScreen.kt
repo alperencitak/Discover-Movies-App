@@ -30,13 +30,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alperencitak.discover_movies_app.R
+import com.alperencitak.discover_movies_app.domain.model.Movie
 import com.alperencitak.discover_movies_app.presentation.common.MovieGridList
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
 import com.alperencitak.discover_movies_app.utils.MovieGridCard
 
 @Composable
 fun FavoritesScreen(
-    state: FavoritesState
+    state: FavoritesState,
+    navigateToDetails: (Movie) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -56,7 +58,8 @@ fun FavoritesScreen(
             titleIcon = Icons.Default.Favorite,
             titleIconTint = SoftRed,
             isCountBarVisible = true,
-            gridCells = 2
+            gridCells = 2,
+            onClickItem = { navigateToDetails(it) }
         )
     }
 

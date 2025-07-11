@@ -38,7 +38,8 @@ import com.alperencitak.discover_movies_app.utils.getVoteColor
 
 @Composable
 fun HomeScreen(
-    movies: LazyPagingItems<Movie>
+    movies: LazyPagingItems<Movie>,
+    navigateToDetails: (Movie) -> Unit
 ) {
 
     Box(
@@ -73,8 +74,8 @@ fun HomeScreen(
             }
 
             items(count = movies.itemCount){
-                movies[it]?.let {
-                    MovieGridCard(movie = it, onClick = { })
+                movies[it]?.let { movie ->
+                    MovieGridCard(movie = movie, onClick = { navigateToDetails(movie) })
                 }
             }
 

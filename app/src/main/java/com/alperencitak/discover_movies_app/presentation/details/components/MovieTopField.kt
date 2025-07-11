@@ -49,7 +49,8 @@ fun MovieTrailerAndPoster(
     movie: Movie?,
     trailer: Video?,
     onFavoriteClick: () -> Unit,
-    isFavorite: Boolean
+    isFavorite: Boolean,
+    navigateUp: () -> Unit
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     var isFullScreenTrailer by remember { mutableStateOf(false) }
@@ -136,7 +137,7 @@ fun MovieTrailerAndPoster(
                 if (isFullScreenTrailer) {
                     isFullScreenTrailer = false
                 } else {
-                    // TODO() NavigateUp
+                    navigateUp()
                 }
             },
             modifier = Modifier

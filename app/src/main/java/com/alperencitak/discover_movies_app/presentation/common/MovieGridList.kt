@@ -43,7 +43,8 @@ fun MovieGridList(
     titleIcon: ImageVector = Icons.Default.KeyboardArrowDown,
     titleIconTint: Color = Color.Black,
     isCountBarVisible: Boolean = false,
-    gridCells: Int = 3
+    gridCells: Int = 3,
+    onClickItem: (Movie) -> Unit
 ) {
     val nunito = FontFamily(Font(R.font.nunito_black))
     LazyVerticalGrid(
@@ -96,7 +97,7 @@ fun MovieGridList(
             }
         }
         items(movies){ movie ->
-            MovieGridCard(movie = movie, onClick = { })
+            MovieGridCard(movie = movie, onClick = { onClickItem(movie) })
         }
     }
 }
@@ -105,7 +106,8 @@ fun MovieGridList(
 fun MovieGridList(
     modifier: Modifier = Modifier,
     movies: LazyPagingItems<Movie>,
-    gridCells: Int = 3
+    gridCells: Int = 3,
+    onItemClick: (Movie) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(gridCells),
@@ -116,8 +118,8 @@ fun MovieGridList(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(count = movies.itemCount){
-            movies[it]?.let {
-                MovieGridCard(movie = it, onClick = { })
+            movies[it]?.let { movie ->
+                MovieGridCard(movie = movie, onClick = { onItemClick(movie) })
             }
         }
     }

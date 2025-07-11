@@ -25,6 +25,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -34,6 +35,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.alperencitak.discover_movies_app.presentation.navigator.MovieNavigator
 import com.alperencitak.discover_movies_app.ui.theme.DiscoverMoviesAppTheme
+import com.alperencitak.discover_movies_app.ui.theme.MyAppTheme
 import com.alperencitak.discover_movies_app.ui.theme.SoftDarkBlue
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -45,7 +47,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            DiscoverMoviesAppTheme {
+            MyAppTheme {
                 val isSystemInDarkMode = isSystemInDarkTheme()
                 val systemController = rememberSystemUiController()
 
@@ -56,7 +58,16 @@ class MainActivity : ComponentActivity() {
                     )
                 }
 
-                Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {
+                Box(
+                    modifier = Modifier.background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color(0xFF1F1D2B),
+                                Color(0xFF171621)
+                            )
+                        )
+                    )
+                ) {
                     MovieNavigator()
                 }
             }
@@ -65,7 +76,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ScaffoldWithNavBar(){
+fun ScaffoldWithNavBar() {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
     val nunito = FontFamily(
@@ -74,7 +85,7 @@ fun ScaffoldWithNavBar(){
     val barRoutes = listOf("main", "search", "categories", "favorites")
     Scaffold(
         bottomBar = {
-            if(barRoutes.contains(currentRoute)){
+            if (barRoutes.contains(currentRoute)) {
                 NavigationBar(
                     containerColor = SoftDarkBlue,
                     modifier = Modifier
@@ -82,15 +93,15 @@ fun ScaffoldWithNavBar(){
                         .height(64.dp)
                         .clip(CircleShape)
                         .shadow(8.dp)
-                ){
+                ) {
                     NavigationBarItem(
                         selected = currentRoute == "main",
                         onClick = {
-                            if(currentRoute != "main"){
+                            if (currentRoute != "main") {
                                 navController.navigate("main")
                             }
                         },
-                        icon = { Icon(Icons.Default.Home, contentDescription = "Home Icon")},
+                        icon = { Icon(Icons.Default.Home, contentDescription = "Home Icon") },
                         colors = NavigationBarItemDefaults.colors(
                             indicatorColor = SoftRed,
                             selectedIconColor = SoftDarkBlue,
@@ -100,7 +111,7 @@ fun ScaffoldWithNavBar(){
                     NavigationBarItem(
                         selected = currentRoute == "search",
                         onClick = {
-                            if(currentRoute != "search"){
+                            if (currentRoute != "search") {
                                 navController.navigate("search")
                             }
                         },
@@ -114,7 +125,7 @@ fun ScaffoldWithNavBar(){
                     NavigationBarItem(
                         selected = currentRoute == "categories",
                         onClick = {
-                            if(currentRoute != "categories"){
+                            if (currentRoute != "categories") {
                                 navController.navigate("categories")
                             }
                         },
@@ -128,7 +139,7 @@ fun ScaffoldWithNavBar(){
                     NavigationBarItem(
                         selected = currentRoute == "favorites",
                         onClick = {
-                            if(currentRoute != "favorites"){
+                            if (currentRoute != "favorites") {
                                 navController.navigate("favorites")
                             }
                         },
@@ -142,7 +153,7 @@ fun ScaffoldWithNavBar(){
                 }
             }
         }
-    ){ paddingValues ->
+    ) { paddingValues ->
         paddingValues
 //        NavScreen(navController, paddingValues)
     }

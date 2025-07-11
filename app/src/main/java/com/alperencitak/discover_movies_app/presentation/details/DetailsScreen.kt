@@ -22,7 +22,8 @@ fun DetailsScreen(
     casts: List<Cast>?,
     crews: List<Crew>?,
     event: (DetailsEvent) -> Unit,
-    isFavorite: Boolean
+    isFavorite: Boolean,
+    navigateUp: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -38,7 +39,8 @@ fun DetailsScreen(
                     event(DetailsEvent.UpsertDeleteMovie(movie))
                 }
             },
-            isFavorite=isFavorite
+            isFavorite=isFavorite,
+            navigateUp={ navigateUp() }
         )
         MovieInformationField(
             movie = movie,

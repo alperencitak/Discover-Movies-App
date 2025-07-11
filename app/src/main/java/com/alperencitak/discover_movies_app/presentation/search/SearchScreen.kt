@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.alperencitak.discover_movies_app.R
+import com.alperencitak.discover_movies_app.domain.model.Movie
 import com.alperencitak.discover_movies_app.presentation.common.MovieGridList
 import com.alperencitak.discover_movies_app.presentation.common.SearchBar
 import com.alperencitak.discover_movies_app.presentation.home.MovieGridCard
@@ -48,7 +49,8 @@ import com.alperencitak.discover_movies_app.ui.theme.SoftRed
 @Composable
 fun SearchScreen(
     state: SearchState,
-    event: (SearchEvent) -> Unit
+    event: (SearchEvent) -> Unit,
+    navigateToDetails: (Movie) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize().background(SoftBlack).padding(top = 36.dp)
@@ -73,7 +75,7 @@ fun SearchScreen(
         Spacer(modifier = Modifier.height(12.dp))
         state.movies?.let {
             val movies = it.collectAsLazyPagingItems()
-            MovieGridList(movies = movies)
+            MovieGridList(movies = movies, onItemClick = { movie -> navigateToDetails(movie) })
         }
     }
 }

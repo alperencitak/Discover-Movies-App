@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.alperencitak.discover_movies_app.domain.model.Genre
+import com.alperencitak.discover_movies_app.domain.model.Movie
 import com.alperencitak.discover_movies_app.presentation.categories.components.CategoryTabsScreen
 import com.alperencitak.discover_movies_app.presentation.common.MovieGridList
 
@@ -21,7 +22,8 @@ import com.alperencitak.discover_movies_app.presentation.common.MovieGridList
 fun CategoriesScreen(
     state: CategoryState,
     event: (CategoryEvent) -> Unit,
-    categories: List<Genre>
+    categories: List<Genre>,
+    navigateToDetails: (Movie) -> Unit
 ) {
 
     Column(
@@ -47,7 +49,7 @@ fun CategoriesScreen(
         Spacer(modifier = Modifier.height(16.dp))
         state.movies?.let {
             val movies = it.collectAsLazyPagingItems()
-            MovieGridList(movies = movies)
+            MovieGridList(movies = movies, onItemClick = { navigateToDetails(it) })
         }
     }
 
