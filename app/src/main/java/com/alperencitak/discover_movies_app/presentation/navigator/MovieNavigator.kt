@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -39,7 +40,9 @@ import com.alperencitak.discover_movies_app.presentation.search.SearchScreen
 import com.alperencitak.discover_movies_app.presentation.search.SearchViewModel
 
 @Composable
-fun MovieNavigator() {
+fun MovieNavigator(
+    statusBarChange: (String) -> Unit
+) {
     val navItems = remember {
         listOf(
             CustomNavigationItem(
@@ -74,10 +77,22 @@ fun MovieNavigator() {
 
     selectedItem = remember(key1 = backstackState) {
         when (backstackState?.destination?.route) {
-            Route.HomeScreen.route -> 0
-            Route.SearchScreen.route -> 1
-            Route.CategoriesScreen.route -> 2
-            Route.FavoritesScreen.route -> 3
+            Route.HomeScreen.route -> {
+                statusBarChange(Route.HomeScreen.route)
+                0
+            }
+            Route.SearchScreen.route -> {
+                statusBarChange(Route.SearchScreen.route)
+                1
+            }
+            Route.CategoriesScreen.route -> {
+                statusBarChange(Route.CategoriesScreen.route)
+                2
+            }
+            Route.FavoritesScreen.route -> {
+                statusBarChange(Route.FavoritesScreen.route)
+                3
+            }
             else -> 0
         }
     }

@@ -22,6 +22,8 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -34,8 +36,11 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.alperencitak.discover_movies_app.presentation.navigator.MovieNavigator
+import com.alperencitak.discover_movies_app.presentation.navigator.Route
+import com.alperencitak.discover_movies_app.ui.theme.CinematicBlack
 import com.alperencitak.discover_movies_app.ui.theme.DiscoverMoviesAppTheme
 import com.alperencitak.discover_movies_app.ui.theme.MyAppTheme
+import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
 import com.alperencitak.discover_movies_app.ui.theme.SoftDarkBlue
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -50,6 +55,7 @@ class MainActivity : ComponentActivity() {
             MyAppTheme {
                 val isSystemInDarkMode = isSystemInDarkTheme()
                 val systemController = rememberSystemUiController()
+                var statusBarColor = remember { mutableStateOf(Color(0xFF1F1D2B)) }
 
                 SideEffect {
                     systemController.setNavigationBarColor(
@@ -62,13 +68,27 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.background(
                         brush = Brush.verticalGradient(
                             colors = listOf(
-                                Color(0xFF1F1D2B),
+                                statusBarColor.value,
                                 Color(0xFF171621)
                             )
                         )
                     )
                 ) {
-                    MovieNavigator()
+                    MovieNavigator(
+                        statusBarChange = { route ->
+                            statusBarColor.value = if (
+                                route == Route.CategoriesScreen.route
+                            ) {
+                                CinematicBlack
+                            }else if(
+                                route == Route.SearchScreen.route
+                            ) {
+                                SoftBlack
+                            }else {
+                                Color(0xFF1F1D2B)
+                            }
+                        }
+                    )
                 }
             }
         }
