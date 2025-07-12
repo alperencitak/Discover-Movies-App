@@ -1,4 +1,4 @@
-package com.alperencitak.discover_movies_app.utils
+package com.alperencitak.discover_movies_app.presentation.common
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color

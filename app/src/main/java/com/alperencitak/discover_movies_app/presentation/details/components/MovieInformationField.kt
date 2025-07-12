@@ -35,10 +35,10 @@ import com.alperencitak.discover_movies_app.R
 import com.alperencitak.discover_movies_app.domain.model.Cast
 import com.alperencitak.discover_movies_app.domain.model.Crew
 import com.alperencitak.discover_movies_app.domain.model.Movie
+import com.alperencitak.discover_movies_app.presentation.common.CastCard
+import com.alperencitak.discover_movies_app.presentation.common.ChipInfo
+import com.alperencitak.discover_movies_app.presentation.common.RatingBar
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
-import com.alperencitak.discover_movies_app.utils.CastCard
-import com.alperencitak.discover_movies_app.utils.ChipInfo
-import com.alperencitak.discover_movies_app.utils.RatingBar
 
 @Composable
 fun MovieInformationField(
