@@ -94,6 +94,9 @@ dependencies {
     //Youtube Player
     implementation(libs.core)
 
+    // Foundation
+    implementation(libs.androidx.foundation)
+
     //Room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)

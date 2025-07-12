@@ -29,16 +29,21 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.alperencitak.discover_movies_app.R
 import com.alperencitak.discover_movies_app.domain.model.Movie
+import com.alperencitak.discover_movies_app.presentation.common.CircularLoadingScreen
 import com.alperencitak.discover_movies_app.presentation.common.MovieGridList
+import com.alperencitak.discover_movies_app.presentation.favorites.components.EmptyFavoritesScreen
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
 import com.alperencitak.discover_movies_app.utils.MovieGridCard
 
 @Composable
 fun FavoritesScreen(
     state: FavoritesState,
-    navigateToDetails: (Movie) -> Unit
+    navigateToDetails: (Movie) -> Unit,
+    navigateToHome: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -52,15 +57,22 @@ fun FavoritesScreen(
                 )
             )
     ) {
-        MovieGridList(
-            movies = state.movies,
-            title = "Favorites",
-            titleIcon = Icons.Default.Favorite,
-            titleIconTint = SoftRed,
-            isCountBarVisible = true,
-            gridCells = 2,
-            onClickItem = { navigateToDetails(it) }
-        )
+        val movies = state.movies
+        if(movies.isEmpty()){
+            EmptyFavoritesScreen(
+                onExploreClick = { navigateToHome() }
+            )
+        }else{
+            MovieGridList(
+                movies = state.movies,
+                title = "Favorites",
+                titleIcon = Icons.Default.Favorite,
+                titleIconTint = SoftRed,
+                isCountBarVisible = true,
+                gridCells = 2,
+                onClickItem = { navigateToDetails(it) }
+            )
+        }
     }
 
 }

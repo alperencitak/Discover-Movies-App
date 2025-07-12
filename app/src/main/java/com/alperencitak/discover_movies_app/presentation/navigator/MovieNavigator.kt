@@ -19,6 +19,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.alperencitak.discover_movies_app.R
 import com.alperencitak.discover_movies_app.data.remote.dto.MovieResponse
@@ -27,6 +28,7 @@ import com.alperencitak.discover_movies_app.domain.model.Movie
 import com.alperencitak.discover_movies_app.domain.model.Video
 import com.alperencitak.discover_movies_app.presentation.categories.CategoriesScreen
 import com.alperencitak.discover_movies_app.presentation.categories.CategoriesViewModel
+import com.alperencitak.discover_movies_app.presentation.common.CircularLoadingScreen
 import com.alperencitak.discover_movies_app.presentation.details.DetailsEvent
 import com.alperencitak.discover_movies_app.presentation.details.DetailsScreen
 import com.alperencitak.discover_movies_app.presentation.details.DetailsViewModel
@@ -102,41 +104,43 @@ fun MovieNavigator(
             .fillMaxSize()
             .statusBarsPadding(),
         bottomBar = {
-            CustomBottomNavigation(
-                items = navItems,
-                selected = selectedItem,
-                onItemClick = { index ->
-                    when (index) {
-                        0 -> {
-                            navigateToTap(
-                                navController = navController,
-                                route = Route.HomeScreen.route
-                            )
-                        }
+            if(isBottomBarVisible){
+                CustomBottomNavigation(
+                    items = navItems,
+                    selected = selectedItem,
+                    onItemClick = { index ->
+                        when (index) {
+                            0 -> {
+                                navigateToTap(
+                                    navController = navController,
+                                    route = Route.HomeScreen.route
+                                )
+                            }
 
-                        1 -> {
-                            navigateToTap(
-                                navController = navController,
-                                route = Route.SearchScreen.route
-                            )
-                        }
+                            1 -> {
+                                navigateToTap(
+                                    navController = navController,
+                                    route = Route.SearchScreen.route
+                                )
+                            }
 
-                        2 -> {
-                            navigateToTap(
-                                navController = navController,
-                                route = Route.CategoriesScreen.route
-                            )
-                        }
+                            2 -> {
+                                navigateToTap(
+                                    navController = navController,
+                                    route = Route.CategoriesScreen.route
+                                )
+                            }
 
-                        3 -> {
-                            navigateToTap(
-                                navController = navController,
-                                route = Route.FavoritesScreen.route
-                            )
+                            3 -> {
+                                navigateToTap(
+                                    navController = navController,
+                                    route = Route.FavoritesScreen.route
+                                )
+                            }
                         }
                     }
-                }
-            )
+                )
+            }
         }
     ) {
         val bottomPadding = it.calculateBottomPadding()
@@ -151,16 +155,24 @@ fun MovieNavigator(
                 val viewModel: HomeViewModel = hiltViewModel()
                 val movies = viewModel.movies.collectAsLazyPagingItems()
                 val topRatedMovies = viewModel.topRatedMovies.collectAsLazyPagingItems()
-                HomeScreen(
-                    movies = movies,
-                    topRatedMovies = topRatedMovies,
-                    navigateToDetails = { movie ->
-                        navigateToDetails(
-                            navController = navController,
-                            movie = movie
+                when (movies.loadState.refresh) {
+                    is LoadState.Loading -> {
+                        CircularLoadingScreen()
+                    }
+                    is LoadState.Error -> {
+                        val error = movies.loadState.refresh as LoadState.Error
+                        // Error
+                    }
+                    else -> {
+                        HomeScreen(
+                            movies = movies,
+                            topRatedMovies = topRatedMovies,
+                            navigateToDetails = { movie ->
+                                navigateToDetails(navController, movie)
+                            }
                         )
                     }
-                )
+                }
             }
             composable(
                 route = Route.SearchScreen.route
@@ -209,6 +221,9 @@ fun MovieNavigator(
                             navController = navController,
                             movie = movie
                         )
+                    },
+                    navigateToHome = {
+                        navigateToTap(navController, Route.HomeScreen.route)
                     }
                 )
             }
@@ -234,18 +249,21 @@ fun MovieNavigator(
                         val movie = movieResponse?.movie
                         val casts = movieResponse?.casts
                         val crews = movieResponse?.crews
-
-                        DetailsScreen(
-                            movie = movie,
-                            trailer = youtubeVideo,
-                            casts = casts,
-                            crews = crews,
-                            event = viewModel::onEvent,
-                            isFavorite = isFavorite,
-                            navigateUp = {
-                                navController.navigateUp()
-                            }
-                        )
+                        if(movieResponse == null){
+                            CircularLoadingScreen()
+                        }else{
+                            DetailsScreen(
+                                movie = movie,
+                                trailer = youtubeVideo,
+                                casts = casts,
+                                crews = crews,
+                                event = viewModel::onEvent,
+                                isFavorite = isFavorite,
+                                navigateUp = {
+                                    navController.navigateUp()
+                                }
+                            )
+                        }
                     }
             }
         }

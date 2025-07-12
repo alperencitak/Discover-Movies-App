@@ -12,11 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.alperencitak.discover_movies_app.domain.model.Genre
 import com.alperencitak.discover_movies_app.domain.model.Movie
 import com.alperencitak.discover_movies_app.presentation.categories.components.CategoryTabsScreen
+import com.alperencitak.discover_movies_app.presentation.common.CircularLoadingScreen
 import com.alperencitak.discover_movies_app.presentation.common.MovieGridList
+import com.alperencitak.discover_movies_app.presentation.home.HomeScreen
 
 @Composable
 fun CategoriesScreen(
@@ -49,7 +52,18 @@ fun CategoriesScreen(
         Spacer(modifier = Modifier.height(16.dp))
         state.movies?.let {
             val movies = it.collectAsLazyPagingItems()
-            MovieGridList(movies = movies, onItemClick = { navigateToDetails(it) })
+            when (movies.loadState.refresh) {
+                is LoadState.Loading -> {
+                    CircularLoadingScreen()
+                }
+                is LoadState.Error -> {
+                    val error = movies.loadState.refresh as LoadState.Error
+                    // Error
+                }
+                else -> {
+                    MovieGridList(movies = movies, onItemClick = { navigateToDetails(it) })
+                }
+            }
         }
     }
 
