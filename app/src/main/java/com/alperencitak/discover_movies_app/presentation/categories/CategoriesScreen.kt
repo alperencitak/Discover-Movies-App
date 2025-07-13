@@ -49,7 +49,6 @@ fun CategoriesScreen(
                 event(CategoryEvent.UpdateGenre(genreId = it.id))
             }
         )
-        Spacer(modifier = Modifier.height(16.dp))
         state.movies?.let {
             val movies = it.collectAsLazyPagingItems()
             when (movies.loadState.refresh) {

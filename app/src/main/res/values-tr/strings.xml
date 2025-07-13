@@ -2,8 +2,11 @@
 <resources>
     <string name="app_name">Keşfet: Filmler &amp; Diziler</string>
     <string name="top_rated">En İyi Filmler</string>
+    <string name="all_movies">Tüm Filmler</string>
     <string name="week_trends">Bu Haftanın Trendleri</string>
     <string name="trailer">FRAGMAN</string>
     <string name="actors">Oyuncular</string>
-    <string name="search">Ara...</string>
+    <string name="search">Film arayın…</string>
+    <string name="no_search_query">Sevdiğin veya merak ettiğin bir filmi bulmak için bir şeyler yaz!</string>
+    <string name="empty_movies">Aradığınız kriterlere uygun filmler bulunamadı…</string>
 </resources>

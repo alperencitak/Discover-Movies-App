@@ -54,7 +54,7 @@ fun MovieCardShimmerEffect(
 ){
     Card(
         modifier = Modifier
-            .width(160.dp)
+            .width(150.dp)
             .aspectRatio(0.7f),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)

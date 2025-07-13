@@ -18,8 +18,8 @@ android {
         applicationId = "com.alperencitak.discover_movies_app"
         minSdk = 24
         targetSdk = 35
-        versionCode = 6
-        versionName = "3.2"
+        versionCode = 7
+        versionName = "4.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 

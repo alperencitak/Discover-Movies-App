@@ -35,7 +35,7 @@ fun MovieGridCard(movie: Movie, onClick: () -> Unit) {
 
     Card(
         modifier = Modifier
-            .width(160.dp)
+            .width(150.dp)
             .aspectRatio(0.7f)
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(12.dp),

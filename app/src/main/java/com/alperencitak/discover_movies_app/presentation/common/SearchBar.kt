@@ -18,6 +18,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -48,7 +49,7 @@ fun SearchBar(
             .focusRequester(focusRequester),
         placeholder = {
             Text(
-                "Search for movies...",
+                text= stringResource(R.string.search),
                 fontFamily = nunito,
                 color = Color.White.copy(alpha = 0.6f)
             )
