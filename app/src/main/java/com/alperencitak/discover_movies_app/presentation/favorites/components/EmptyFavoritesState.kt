@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -48,7 +49,7 @@ fun EmptyFavoritesScreen(
             )
             
             Text(
-                text = "No Favorites Yet",
+                text = stringResource(R.string.no_favorites_yet),
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontFamily = nunito,
                     color = Color.White,
@@ -58,7 +59,7 @@ fun EmptyFavoritesScreen(
             )
             
             Text(
-                text = "Start exploring and add movies to your favorites",
+                text = stringResource(R.string.start_explore_favorites),
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontFamily = nunito,
                     color = Color.White.copy(alpha = 0.7f)
@@ -75,7 +76,7 @@ fun EmptyFavoritesScreen(
                 modifier = Modifier.padding(top = 8.dp)
             ) {
                 Text(
-                    text = "Explore Movies",
+                    text = stringResource(R.string.explore),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontFamily = nunito,
                         fontWeight = FontWeight.Medium

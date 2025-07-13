@@ -90,11 +90,12 @@ dependencies {
 
     //Accompanist
     implementation (libs.accompanist.systemuicontroller)
+    implementation(libs.accompanist.pager)
 
     //Youtube Player
     implementation(libs.core)
 
-    // Foundation
+    //Foundation
     implementation(libs.androidx.foundation)
 
     //Room

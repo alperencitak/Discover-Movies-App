@@ -7,6 +7,10 @@
     <string name="trailer">FRAGMAN</string>
     <string name="actors">Oyuncular</string>
     <string name="search">Film arayın…</string>
+    <string name="favorites">Favoriler</string>
+    <string name="no_favorites_yet">Henüz Favorin Yok</string>
+    <string name="start_explore_favorites">Keşfetmeye başlayın ve filmleri favorilerinize ekleyin</string>
+    <string name="explore">Filmleri Keşfet</string>
     <string name="no_search_query">Sevdiğin veya merak ettiğin bir filmi bulmak için bir şeyler yaz!</string>
     <string name="empty_movies">Aradığınız kriterlere uygun filmler bulunamadı…</string>
 </resources>

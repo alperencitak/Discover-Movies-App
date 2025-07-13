@@ -58,8 +58,12 @@ class MainActivity : ComponentActivity() {
                 var statusBarColor = remember { mutableStateOf(Color(0xFF1F1D2B)) }
 
                 SideEffect {
+                    systemController.setStatusBarColor(
+                        color = statusBarColor.value, // ya da direkt Color(0xFF1F1D2B)
+                        darkIcons = !isSystemInDarkMode
+                    )
                     systemController.setNavigationBarColor(
-                        color = Color.Transparent,
+                        color = CinematicBlack,
                         darkIcons = !isSystemInDarkMode
                     )
                 }

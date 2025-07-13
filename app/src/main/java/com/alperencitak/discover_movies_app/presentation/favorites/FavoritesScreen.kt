@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import com.alperencitak.discover_movies_app.R
 import com.alperencitak.discover_movies_app.domain.model.Movie
 import com.alperencitak.discover_movies_app.presentation.common.MovieGridList
 import com.alperencitak.discover_movies_app.presentation.favorites.components.EmptyFavoritesScreen
@@ -40,7 +42,7 @@ fun FavoritesScreen(
         }else{
             MovieGridList(
                 movies = state.movies,
-                title = "Favorites",
+                title = stringResource(R.string.favorites),
                 titleIcon = Icons.Default.Favorite,
                 titleIconTint = SoftRed,
                 isCountBarVisible = true,

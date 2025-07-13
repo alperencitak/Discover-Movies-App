@@ -6,6 +6,10 @@
     <string name="trailer">TRAILER</string>
     <string name="actors">Actors</string>
     <string name="search">Search for movies…</string>
+    <string name="favorites">Favorites</string>
+    <string name="no_favorites_yet">No Favorites Yet</string>
+    <string name="start_explore_favorites">Start exploring and add movies to your favorites</string>
+    <string name="explore">Explore Movies</string>
     <string name="no_search_query">Enter keywords to find a movie you love or are curious about!</string>
     <string name="empty_movies">No movies matching your search criteria were found…</string>
 </resources>
