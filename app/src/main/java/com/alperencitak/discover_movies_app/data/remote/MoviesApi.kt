@@ -20,6 +20,15 @@ interface MoviesApi {
         @Query("page") page: Int
     ): MovieListResponse
 
+    @GET("discover/movie")
+    suspend fun getMoviesByCast(
+        @Query("api_key") apiKey: String = BuildConfig.API_KEY,
+        @Query("language") language: String,
+        @Query("with_cast") castId: String,
+        @Query("sort_by") sortBy: String = "popularity.desc",
+        @Query("page") page: Int
+    ): MovieListResponse
+
     @GET("search/movie")
     suspend fun searchMovie(
         @Query("api_key") apiKey: String = BuildConfig.API_KEY,

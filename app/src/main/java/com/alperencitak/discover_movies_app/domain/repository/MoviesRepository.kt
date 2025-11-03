@@ -16,6 +16,8 @@ interface MoviesRepository {
 
     fun getMoviesByGenre(genreId: Int): Flow<PagingData<Movie>>
 
+    fun getMoviesByCast(castId: Int): Flow<PagingData<Movie>>
+
     suspend fun getGenres(): GenreResponse
 
     suspend fun getMovie(id: Int): MovieResponse

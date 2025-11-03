@@ -8,6 +8,7 @@ import com.alperencitak.discover_movies_app.data.local.MoviesDao
 import com.alperencitak.discover_movies_app.data.remote.CategorizedMoviesPagingSource
 import com.alperencitak.discover_movies_app.data.remote.MoviesApi
 import com.alperencitak.discover_movies_app.data.remote.MoviesPagingSource
+import com.alperencitak.discover_movies_app.data.remote.MoviesWithCastPagingSource
 import com.alperencitak.discover_movies_app.data.remote.SearchMoviesPagingSource
 import com.alperencitak.discover_movies_app.data.remote.TopRatedMoviesPagingSource
 import com.alperencitak.discover_movies_app.data.remote.dto.GenreResponse
@@ -88,6 +89,24 @@ class MoviesRepositoryImpl(
                     moviesApi = moviesApi,
                     context = context,
                     genreId = genreId
+                )
+            }
+        ).flow
+    }
+
+    override fun getMoviesByCast(castId: Int): Flow<PagingData<Movie>> {
+        val pageSize = 20
+        return Pager(
+            config = PagingConfig(
+                pageSize = pageSize,
+                prefetchDistance = 3,
+                initialLoadSize = pageSize * 2
+            ),
+            pagingSourceFactory = {
+                MoviesWithCastPagingSource(
+                    moviesApi = moviesApi,
+                    context = context,
+                    castId = castId
                 )
             }
         ).flow

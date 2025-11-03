@@ -5,6 +5,7 @@ data class MoviesUseCases(
     val getTopRatedMovies: GetTopRatedMovies,
     val searchMovies: SearchMovies,
     val getMoviesByGenre: GetMoviesByGenre,
+    val getMoviesByCast: GetMoviesByCast,
     val getMovie: GetMovie,
     val getGenres: GetGenres,
     val upsertMovie: UpsertMovie,
