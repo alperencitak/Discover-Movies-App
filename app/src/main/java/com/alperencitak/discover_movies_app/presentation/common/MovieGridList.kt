@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -71,7 +72,7 @@ fun MovieGridList(
                             tint = titleIconTint
                         )
                         Text(
-                            text = "Favorites",
+                            text = title,
                             style = MaterialTheme.typography.titleLarge.copy(
                                 fontFamily = nunito,
                                 fontWeight = FontWeight.Bold,
@@ -82,7 +83,7 @@ fun MovieGridList(
                     }
                     if(isCountBarVisible){
                         Text(
-                            text = "${movies.size} Movies",
+                            text = "${movies.size} ${stringResource(R.string.movies)}",
                             style = MaterialTheme.typography.titleMedium.copy(
                                 fontFamily = nunito,
                                 color = Color.White.copy(alpha = 0.7f),
