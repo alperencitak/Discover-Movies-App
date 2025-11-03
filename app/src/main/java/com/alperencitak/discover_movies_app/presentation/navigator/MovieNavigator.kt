@@ -23,9 +23,12 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.alperencitak.discover_movies_app.R
 import com.alperencitak.discover_movies_app.data.remote.dto.MovieResponse
+import com.alperencitak.discover_movies_app.domain.model.Cast
 import com.alperencitak.discover_movies_app.domain.model.Genre
 import com.alperencitak.discover_movies_app.domain.model.Movie
 import com.alperencitak.discover_movies_app.domain.model.Video
+import com.alperencitak.discover_movies_app.presentation.castmovies.CastMoviesScreen
+import com.alperencitak.discover_movies_app.presentation.castmovies.CastMoviesViewModel
 import com.alperencitak.discover_movies_app.presentation.categories.CategoriesScreen
 import com.alperencitak.discover_movies_app.presentation.categories.CategoriesViewModel
 import com.alperencitak.discover_movies_app.presentation.common.CircularLoadingScreen
@@ -261,9 +264,33 @@ fun MovieNavigator(
                                 isFavorite = isFavorite,
                                 navigateUp = {
                                     navController.navigateUp()
+                                },
+                                navigateToCastMovies = { cast ->
+                                    navigateToCastMovies(navController, cast)
                                 }
                             )
                         }
+                    }
+            }
+            composable(
+                route = Route.CastMoviesScreen.route
+            ) {
+                val viewModel: CastMoviesViewModel = hiltViewModel()
+                navController.previousBackStackEntry?.savedStateHandle?.get<Cast?>("cast")
+                    ?.let { cast ->
+                        CastMoviesScreen(
+                            state = viewModel.state.value,
+                            cast = cast,
+                            navigateToDetails = { movie ->
+                                navigateToDetails(
+                                    navController = navController,
+                                    movie = movie
+                                )
+                            },
+                            navigateUp = {
+                                navController.navigateUp()
+                            }
+                        )
                     }
             }
         }
@@ -286,4 +313,9 @@ private fun navigateToTap(navController: NavController, route: String) {
 private fun navigateToDetails(navController: NavController, movie: Movie) {
     navController.currentBackStackEntry?.savedStateHandle?.set("movie", movie)
     navController.navigate(Route.DetailsScreen.route)
+}
+
+private fun navigateToCastMovies(navController: NavController, cast: Cast) {
+    navController.currentBackStackEntry?.savedStateHandle?.set("cast", cast)
+    navController.navigate(Route.CastMoviesScreen.route)
 }

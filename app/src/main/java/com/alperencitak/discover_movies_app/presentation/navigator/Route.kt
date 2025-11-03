@@ -9,5 +9,6 @@ sealed class Route(
     object CategoriesScreen: Route(route = "categories")
     object FavoritesScreen: Route(route = "favorites")
     object DetailsScreen: Route(route = "details")
+    object CastMoviesScreen: Route(route = "castmovies")
 
 }
