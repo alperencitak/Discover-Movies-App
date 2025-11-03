@@ -86,7 +86,7 @@ fun MovieInformationField(
                         if(genresText.isNotBlank()){
                             genresText += " / "
                         }
-                        genresText += genre
+                        genresText += genre.name
                     }
                     ChipInfo(
                         icon = R.drawable.genres_icon,
@@ -98,7 +98,8 @@ fun MovieInformationField(
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = if(movie != null && movie.title.isNotBlank()) movie.title else
@@ -107,7 +108,8 @@ fun MovieInformationField(
                     fontFamily = nunito,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
-                )
+                ),
+                modifier = Modifier.fillMaxWidth(0.8f)
             )
             movie?.release_date?.take(4)?.let { year ->
                 ChipInfo(
