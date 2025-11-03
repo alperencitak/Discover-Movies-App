@@ -109,7 +109,7 @@ fun MovieInformationField(
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 ),
-                modifier = Modifier.fillMaxWidth(0.8f)
+                modifier = Modifier.fillMaxWidth(0.7f)
             )
             movie?.release_date?.take(4)?.let { year ->
                 ChipInfo(
