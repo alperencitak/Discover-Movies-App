@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -16,6 +17,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -34,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
@@ -43,6 +48,7 @@ import com.alperencitak.discover_movies_app.domain.model.Genre
 import com.alperencitak.discover_movies_app.domain.model.Movie
 import com.alperencitak.discover_movies_app.presentation.categories.components.CategoryTabsScreen
 import com.alperencitak.discover_movies_app.presentation.common.CircularLoadingScreen
+import com.alperencitak.discover_movies_app.presentation.common.MovieGridCard
 import com.alperencitak.discover_movies_app.presentation.common.MovieGridList
 import com.alperencitak.discover_movies_app.presentation.home.HomeScreen
 
@@ -53,7 +59,7 @@ fun CastMoviesScreen(
     navigateUp: () -> Unit,
     navigateToDetails: (Movie) -> Unit
 ) {
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(
@@ -65,10 +71,10 @@ fun CastMoviesScreen(
                 )
             )
             .statusBarsPadding(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        contentAlignment = Alignment.TopStart
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().zIndex(3f),
             horizontalArrangement = Arrangement.Start
         ) {
             IconButton(
@@ -78,8 +84,8 @@ fun CastMoviesScreen(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .size(40.dp)
-                    .offset(y = 24.dp)
-                    .background(Color.Black.copy(alpha = 0.5f), CircleShape)
+                    .offset(y = 12.dp)
+                    .background(Color.Black.copy(alpha = 0.8f), CircleShape)
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -88,24 +94,6 @@ fun CastMoviesScreen(
                 )
             }
         }
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(cast.getFullPosterPath())
-                .crossfade(true)
-                .build(),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .width(140.dp)
-                .aspectRatio(0.7f)
-                .clip(RoundedCornerShape(12.dp))
-                .clickable { }
-        )
-        Text(
-            text = cast.name,
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(bottom = 32.dp, top = 12.dp)
-        )
         state.movies?.let { moviesFlow ->
             val movies = moviesFlow.collectAsLazyPagingItems()
             when (movies.loadState.refresh) {
@@ -117,7 +105,48 @@ fun CastMoviesScreen(
                     // Error
                 }
                 else -> {
-                    MovieGridList(movies = movies, onItemClick = { navigateToDetails(it) })
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(3),
+                        modifier = Modifier
+                            .padding(horizontal = 12.dp),
+                        contentPadding = PaddingValues(bottom = 80.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        item(span = { GridItemSpan(3) }){
+                            Column(
+                                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                AsyncImage(
+                                    model = ImageRequest.Builder(LocalContext.current)
+                                        .data(cast.getFullPosterPath())
+                                        .crossfade(true)
+                                        .build(),
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .width(140.dp)
+                                        .aspectRatio(0.7f)
+                                        .clip(RoundedCornerShape(12.dp))
+                                        .clickable { }
+                                )
+                                Text(
+                                    text = cast.name,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    modifier = Modifier.padding(bottom = 16.dp, top = 8.dp)
+                                )
+                            }
+                        }
+                        item(span = { GridItemSpan(3) }) {
+                            Spacer(modifier=Modifier.height(2.dp))
+                        }
+                        items(count = movies.itemCount){
+                            movies[it]?.let { movie ->
+                                MovieGridCard(movie = movie, onClick = { navigateToDetails(movie) })
+                            }
+                        }
+                    }
                 }
             }
         }
