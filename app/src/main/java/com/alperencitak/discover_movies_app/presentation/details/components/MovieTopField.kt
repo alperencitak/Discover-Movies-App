@@ -110,7 +110,7 @@ fun MovieTrailerAndPoster(
                             Color.Transparent,
                             SoftBlack
                         ),
-                        startY = 100f
+                        startY = 75f
                     )
                 )
                 .clickable { isFullScreenTrailer = true }
