@@ -79,26 +79,47 @@ fun MovieInformationField(
                 RatingBar(
                     rating = movie?.vote_average ?: 0.0F
                 )
-                movie?.release_date?.take(4)?.let { year ->
+                movie?.let {
+                    var genresText = ""
+                    it.genres.take(2).forEach { genre ->
+                        if(genresText.isNotBlank()){
+                            genresText += " / "
+                        }
+                        genresText += genre
+                    }
                     ChipInfo(
-                        icon = Icons.Default.DateRange,
-                        text = year,
+                        icon = R.drawable.genres_icon,
+                        text = genresText,
                         nunito = nunito
                     )
                 }
             }
         }
-        Text(
-            text = movie?.title ?: "",
-            style = MaterialTheme.typography.headlineMedium.copy(
-                fontFamily = nunito,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Text(
+                text = if(movie != null && movie.title.isNotBlank()) movie.title else
+                    stringResource(R.string.unnamed),
+                style = MaterialTheme.typography.headlineMedium.copy(
+                    fontFamily = nunito,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
             )
-        )
+            movie?.release_date?.take(4)?.let { year ->
+                ChipInfo(
+                    icon = R.drawable.date_range_icon,
+                    text = year,
+                    nunito = nunito
+                )
+            }
+        }
         Spacer(modifier = Modifier.height(20.dp))
         Text(
-            text = movie?.overview ?: "",
+            text = if(movie != null && movie.overview.isNotBlank()) movie.overview else
+                stringResource(R.string.no_movie_info),
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontFamily = nunito,
                 color = Color.White.copy(alpha = 0.7f)
