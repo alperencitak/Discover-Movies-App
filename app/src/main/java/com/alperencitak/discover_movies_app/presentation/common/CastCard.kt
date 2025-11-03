@@ -1,5 +1,6 @@
 package com.alperencitak.discover_movies_app.presentation.common
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -25,9 +26,15 @@ import coil.request.ImageRequest
 import com.alperencitak.discover_movies_app.domain.model.Cast
 
 @Composable
-fun CastCard(cast: Cast, nunito: FontFamily) {
+fun CastCard(cast: Cast, nunito: FontFamily, onClick: (Cast) -> Unit) {
     Column(
-        modifier = Modifier.width(100.dp),
+        modifier = Modifier
+            .width(100.dp)
+            .clickable {
+                if (cast.profile_path != null && cast.name.isNotBlank()) {
+                    onClick(cast)
+                }
+            },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         AsyncImage(

@@ -23,7 +23,8 @@ fun DetailsScreen(
     crews: List<Crew>?,
     event: (DetailsEvent) -> Unit,
     isFavorite: Boolean,
-    navigateUp: () -> Unit
+    navigateUp: () -> Unit,
+    navigateToCastMovies: (Cast) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -45,7 +46,8 @@ fun DetailsScreen(
         MovieInformationField(
             movie = movie,
             casts = casts,
-            crews = crews
+            crews = crews,
+            onClickCast = { navigateToCastMovies(it) }
         )
     }
 }

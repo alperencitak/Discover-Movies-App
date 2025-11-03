@@ -1,4 +1,4 @@
-package com.alperencitak.discover_movies_app.presentation.details.components
+package com.alperencitak.discover_movies_app.presentation.castmovies.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -36,66 +36,23 @@ import com.alperencitak.discover_movies_app.R
 import com.alperencitak.discover_movies_app.domain.model.Cast
 import com.alperencitak.discover_movies_app.domain.model.Crew
 import com.alperencitak.discover_movies_app.domain.model.Movie
+import com.alperencitak.discover_movies_app.presentation.castmovies.CastMoviesEvent
 import com.alperencitak.discover_movies_app.presentation.common.CastCard
 import com.alperencitak.discover_movies_app.presentation.common.ChipInfo
 import com.alperencitak.discover_movies_app.presentation.common.RatingBar
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
 
 @Composable
-fun MovieInformationField(
-    movie: Movie?,
-    casts: List<Cast>?,
-    crews: List<Crew>?,
-    onClickCast: (Cast) -> Unit
+fun CastInformationField(
+    cast: Cast
 ) {
     val nunito = FontFamily(Font(R.font.nunito_black))
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+            .padding(top = 32.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(movie?.getFullPosterUrl())
-                    .crossfade(true)
-                    .build(),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .width(140.dp)
-                    .aspectRatio(0.7f)
-                    .offset(y = (-56).dp)
-                    .padding(start = 16.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .clickable { }
-            )
 
-            Column(
-                horizontalAlignment = Alignment.End
-            ) {
-                RatingBar(
-                    rating = movie?.vote_average ?: 0.0F
-                )
-                movie?.let {
-                    var genresText = ""
-                    it.genres.take(2).forEach { genre ->
-                        if(genresText.isNotBlank()){
-                            genresText += " / "
-                        }
-                        genresText += genre
-                    }
-                    ChipInfo(
-                        icon = R.drawable.genres_icon,
-                        text = genresText,
-                        nunito = nunito
-                    )
-                }
-            }
-        }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -143,7 +100,7 @@ fun MovieInformationField(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(casts) { cast ->
-                    CastCard(cast = cast, nunito = nunito, onClick = { onClickCast(it) })
+                    CastCard(cast = cast, nunito = nunito)
                 }
             }
         }
