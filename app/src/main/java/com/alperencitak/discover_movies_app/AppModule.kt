@@ -13,6 +13,7 @@ import com.alperencitak.discover_movies_app.domain.usecases.movies.DeleteMovie
 import com.alperencitak.discover_movies_app.domain.usecases.movies.GetGenres
 import com.alperencitak.discover_movies_app.domain.usecases.movies.GetMovie
 import com.alperencitak.discover_movies_app.domain.usecases.movies.GetMovies
+import com.alperencitak.discover_movies_app.domain.usecases.movies.GetMoviesByCast
 import com.alperencitak.discover_movies_app.domain.usecases.movies.GetMoviesByGenre
 import com.alperencitak.discover_movies_app.domain.usecases.movies.GetTopRatedMovies
 import com.alperencitak.discover_movies_app.domain.usecases.movies.IsMovieFavorite
@@ -93,6 +94,7 @@ object AppModule {
             getTopRatedMovies = GetTopRatedMovies(moviesRepository),
             searchMovies = SearchMovies(moviesRepository),
             getMoviesByGenre = GetMoviesByGenre(moviesRepository),
+            getMoviesByCast = GetMoviesByCast(moviesRepository),
             getMovie = GetMovie(moviesRepository),
             getGenres = GetGenres(moviesRepository),
             upsertMovie = UpsertMovie(moviesRepository),
