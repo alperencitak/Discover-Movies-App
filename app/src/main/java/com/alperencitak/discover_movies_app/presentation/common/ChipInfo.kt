@@ -14,12 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun ChipInfo(
-    icon: ImageVector,
+    icon: Int,
     text: String,
     nunito: FontFamily
 ) {
@@ -33,7 +34,7 @@ fun ChipInfo(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Icon(
-                imageVector = icon,
+                painter = painterResource(icon),
                 contentDescription = null,
                 tint = Color.White,
                 modifier = Modifier.size(16.dp)
