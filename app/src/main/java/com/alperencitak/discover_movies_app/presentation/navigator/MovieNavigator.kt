@@ -27,6 +27,7 @@ import com.alperencitak.discover_movies_app.domain.model.Cast
 import com.alperencitak.discover_movies_app.domain.model.Genre
 import com.alperencitak.discover_movies_app.domain.model.Movie
 import com.alperencitak.discover_movies_app.domain.model.Video
+import com.alperencitak.discover_movies_app.presentation.castmovies.CastMoviesEvent
 import com.alperencitak.discover_movies_app.presentation.castmovies.CastMoviesScreen
 import com.alperencitak.discover_movies_app.presentation.castmovies.CastMoviesViewModel
 import com.alperencitak.discover_movies_app.presentation.categories.CategoriesScreen
@@ -278,6 +279,9 @@ fun MovieNavigator(
                 val viewModel: CastMoviesViewModel = hiltViewModel()
                 navController.previousBackStackEntry?.savedStateHandle?.get<Cast?>("cast")
                     ?.let { cast ->
+                        LaunchedEffect(key1 = cast) {
+                            viewModel.onEvent(CastMoviesEvent.UpdateCast(castId = cast.id))
+                        }
                         CastMoviesScreen(
                             state = viewModel.state.value,
                             cast = cast,
