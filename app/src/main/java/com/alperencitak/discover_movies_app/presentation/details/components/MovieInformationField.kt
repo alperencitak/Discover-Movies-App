@@ -66,7 +66,7 @@ fun MovieInformationField(
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .width(140.dp)
+                    .weight(3f)
                     .aspectRatio(0.7f)
                     .offset(y = (-56).dp)
                     .padding(start = 16.dp)
@@ -75,6 +75,7 @@ fun MovieInformationField(
             )
 
             Column(
+                modifier = Modifier.weight(5f),
                 horizontalAlignment = Alignment.End
             ) {
                 RatingBar(
@@ -89,36 +90,30 @@ fun MovieInformationField(
                         genresText += genre.name
                     }
                     ChipInfo(
-                        icon = R.drawable.genres_icon,
                         text = genresText,
+                        nunito = nunito
+                    )
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+                movie?.release_date?.take(4)?.let { year ->
+                    ChipInfo(
+                        icon = R.drawable.date_range_icon,
+                        text = year,
                         nunito = nunito
                     )
                 }
             }
         }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = if(movie != null && movie.title.isNotBlank()) movie.title else
-                    stringResource(R.string.unnamed),
-                style = MaterialTheme.typography.headlineMedium.copy(
-                    fontFamily = nunito,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                ),
-                modifier = Modifier.fillMaxWidth(0.7f)
-            )
-            movie?.release_date?.take(4)?.let { year ->
-                ChipInfo(
-                    icon = R.drawable.date_range_icon,
-                    text = year,
-                    nunito = nunito
-                )
-            }
-        }
+        Text(
+            text = if(movie != null && movie.title.isNotBlank()) movie.title else
+                stringResource(R.string.unnamed),
+            style = MaterialTheme.typography.headlineMedium.copy(
+                fontFamily = nunito,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            ),
+            modifier = Modifier.fillMaxWidth(0.7f)
+        )
         Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = if(movie != null && movie.overview.isNotBlank()) movie.overview else

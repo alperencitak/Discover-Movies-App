@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ChipInfo(
-    icon: Int,
+    icon: Int? = null,
     text: String,
     nunito: FontFamily
 ) {
@@ -33,12 +33,14 @@ fun ChipInfo(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Icon(
-                painter = painterResource(icon),
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier.size(16.dp)
-            )
+            icon?.let {
+                Icon(
+                    painter = painterResource(icon),
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodyMedium.copy(
