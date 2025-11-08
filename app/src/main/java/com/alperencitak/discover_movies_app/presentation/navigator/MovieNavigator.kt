@@ -87,18 +87,22 @@ fun MovieNavigator(
                 statusBarChange(Route.HomeScreen.route)
                 0
             }
+
             Route.SearchScreen.route -> {
                 statusBarChange(Route.SearchScreen.route)
                 1
             }
+
             Route.CategoriesScreen.route -> {
                 statusBarChange(Route.CategoriesScreen.route)
                 2
             }
+
             Route.FavoritesScreen.route -> {
                 statusBarChange(Route.FavoritesScreen.route)
                 3
             }
+
             else -> 0
         }
     }
@@ -108,7 +112,7 @@ fun MovieNavigator(
             .fillMaxSize()
             .statusBarsPadding(),
         bottomBar = {
-            if(isBottomBarVisible){
+            if (isBottomBarVisible) {
                 CustomBottomNavigation(
                     items = navItems,
                     selected = selectedItem,
@@ -163,10 +167,12 @@ fun MovieNavigator(
                     is LoadState.Loading -> {
                         CircularLoadingScreen()
                     }
+
                     is LoadState.Error -> {
                         val error = movies.loadState.refresh as LoadState.Error
                         // Error
                     }
+
                     else -> {
                         HomeScreen(
                             movies = movies,
@@ -247,15 +253,15 @@ fun MovieNavigator(
                         }
 
                         val youtubeVideo = remember(movieResponse) {
-                            movieResponse?.videos?.find { video -> video.site == "YouTube" && video.type == "Trailer" }
+                            movieResponse?.videos?.find { video -> video.site == "YouTube" && video.type == "Trailer" && video.official }
                         }
 
                         val movie = movieResponse?.movie
                         val casts = movieResponse?.casts
                         val crews = movieResponse?.crews
-                        if(movieResponse == null){
+                        if (movieResponse == null) {
                             CircularLoadingScreen()
-                        }else{
+                        } else {
                             DetailsScreen(
                                 movie = movie,
                                 trailer = youtubeVideo,

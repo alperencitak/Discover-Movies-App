@@ -1,5 +1,6 @@
 package com.alperencitak.discover_movies_app.presentation.details.components
 
+import android.util.Log
 import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -40,6 +41,7 @@ import com.alperencitak.discover_movies_app.domain.model.Movie
 import com.alperencitak.discover_movies_app.domain.model.Video
 import com.alperencitak.discover_movies_app.ui.theme.SoftBlack
 import com.alperencitak.discover_movies_app.ui.theme.SoftRed
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
@@ -77,6 +79,9 @@ fun MovieTrailerAndPoster(
                             AbstractYouTubePlayerListener() {
                             override fun onReady(youTubePlayer: YouTubePlayer) {
                                 youTubePlayer.loadVideo(trailer.key, 0f)
+                            }
+                            override fun onError(player: YouTubePlayer, error: PlayerConstants.PlayerError) {
+                                Log.e("YT", "Error: $error")
                             }
                         })
                     }
